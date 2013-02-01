@@ -11,7 +11,7 @@ static void init()
 static void wake()
 { }
 
-static void do_world()
+static void do_world(cpFloat step)
 { }
 
 static void do_render()
@@ -22,7 +22,6 @@ static void do_render()
   SDL_FillRect(screen, NULL, 0);
   stringColor(screen, 20, 20, "Hello world", 0xffffffff);
   SDL_UpdateRect(screen, 0, 0, 0, 0);
-  SDL_Delay(5000);
 }
 
 static void sleep()
@@ -44,3 +43,4 @@ state_t state_main()
 
   return s;
 }
+

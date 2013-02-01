@@ -1,11 +1,13 @@
 #pragma once
 
+#include <chipmunk/chipmunk.h>
+
 typedef struct state {
   void (*init)();
 
   void (*wake)();
 
-  void (*do_world)();
+  void (*do_world)(cpFloat);
   void (*do_render)();
 
   void (*sleep)();
