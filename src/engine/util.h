@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 #ifdef DEBUG_MODE
 #include <stdio.h>
 #define DEBUG(...) \

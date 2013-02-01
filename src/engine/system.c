@@ -54,8 +54,6 @@ void stop_screen()
 
 SDL_Surface* get_screen()
 {
-  if(!ScreenOn)
-    return NULL;
   return SDL_GetVideoSurface();
 }
 
