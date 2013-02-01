@@ -1,4 +1,4 @@
-NAME := goss
+NAME := dame
 BUILD := debug
 
 BINDIR := bin/
@@ -12,7 +12,7 @@ SDL_CFLAGS = $(shell sdl-config --cflags)
 SDL_LDFLAGS = $(shell sdl-config --libs)
 
 ifeq ($(BUILD), debug)
-  CFLAGS += $(SDL_CFLAGS) -O0 -Wall -pedantic -std=gnu11 -DDEBUG_MODE -Iinclude/
+  CFLAGS += $(SDL_CFLAGS) -g -O0 -Wall -pedantic -std=gnu11 -DDEBUG_MODE -Iinclude/
   LDFLAGS += $(SDL_LDFLAGS) -Wall -O0 -Llib/ -lchipmunk -lSDL_gfx
 
 else ifeq ($(BUILD), release)
