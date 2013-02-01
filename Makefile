@@ -17,7 +17,7 @@ ifeq ($(BUILD), debug)
 
 else ifeq ($(BUILD), release)
   CFLAGS += $(SDL_CFLAGS) -O3 -Wall -pedantic -std=gnu11 -DDEBUG_MODE -Iinclude/
-  LDFLAGS += $(SDL_LDFLAGS) -Wall -O3 -Llib/ -static -lchipmunk -lSDL_gfx
+  LDFLAGS += $(SDL_LDFLAGS) -Wall -O3 -lchipmunk -lSDL_gfx
 endif
 
 .PHONY: all clean cleandist
