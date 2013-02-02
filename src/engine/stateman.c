@@ -5,12 +5,12 @@
 
 state_t* CurrentState = NULL;
 
-state_t* get_current_state()
+state_t* curstate()
 {
-  return &CurrentState;
+  return CurrentState;
 }
 
-void switch_state(state_t* state)
+void swstate(state_t* state)
 {
   CurrentState = state;
 }

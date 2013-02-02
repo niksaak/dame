@@ -15,9 +15,7 @@ typedef struct state {
   void (*deinit)();
 } state_t;
 
-extern state_t* CurrentState;
+extern state_t* curstate();
 
-extern state_t* get_current_state();
-
-extern void switch_state(state_t* other_state);
+extern void swstate(state_t* other_state);
 

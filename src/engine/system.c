@@ -7,7 +7,7 @@
 static bool ScreenOn = false;
 static bool UsingOGL = false;
 
-void start_screen(const char* title, int width, int height, bool ogl)
+void scrstart(const char* title, int width, int height, bool ogl)
 {
   SDL_Surface* screen = NULL;
   Uint32 scrflags;
@@ -42,7 +42,7 @@ void start_screen(const char* title, int width, int height, bool ogl)
   ScreenOn = true;
 }
 
-void stop_screen()
+void scrstop()
 {
   if(!ScreenOn) {
     WARN("Attempt to deinit screen whilst it was not initialized");
@@ -52,17 +52,17 @@ void stop_screen()
   }
 }
 
-SDL_Surface* get_screen()
+SDL_Surface* scrget()
 {
   return SDL_GetVideoSurface();
 }
 
-bool screen_on()
+bool scronp()
 {
   return ScreenOn;
 }
 
-bool using_ogl()
+bool using_ogl_p()
 {
   return UsingOGL;
 }
