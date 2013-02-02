@@ -6,6 +6,16 @@
 
 #include "util.h"
 
+SDL_Point cpvSDL(cpVect vector, SDL_Surface* target, cpVect offset)
+{
+  SDL_Point pt;
+
+  pt.x = (target->w / 2) + vector.x - offset.x;
+  pt.y = (target->h / 2) - vector.y + offset.y;
+
+  return pt;
+}
+
 bool nullp(const void* ptr)
 {
   if(ptr == NULL)
