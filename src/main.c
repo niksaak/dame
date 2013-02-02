@@ -33,7 +33,6 @@ void benchprint()
   }
   stringColor(win, 10, win->h - 20, phstr, 0xffffffff);
   stringColor(win, 10, win->h - 10, gxstr, 0xffffffff);
-  SDL_UpdateRect(win, 0, 0, 0, 0);
 }
 
 int main(int argc, char** argv)
@@ -69,14 +68,17 @@ int main(int argc, char** argv)
       t += dt;
       ++phycount;
     }
+
+    SDL_FillRect(get_screen(), NULL, 0);
     st->do_render();
+    benchprint();
+    SDL_UpdateRect(get_screen(), 0, 0, 0, 0);
 
     if(st != CurrentState) {
       st->sleep();
       CurrentState->wake();
     }
     ++gfxcount;
-    benchprint();
     --run_counter;
     timcount += frametime;
   }
