@@ -2,8 +2,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
 
-#include "engine/system.h"
-#include "engine/util.h"
+#include "engine/engine.h"
 #include "states.h"
 
 struct {
@@ -46,6 +45,24 @@ static void wake()
 
 static void do_world(cpFloat step)
 {
+  void process_events()
+  {
+    SDL_Event e;
+
+    if(SDL_PollEvent(&e)) {
+      switch(e.type)
+      {
+        case SDL_QUIT:
+          endgame();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  process_events();
+
   cpSpaceStep(space, step);
 }
 
