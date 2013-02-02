@@ -22,7 +22,7 @@ void benchprint()
   static char phstr[64] = {0};
   static char gxstr[64] = {0};
 
-  if((win = get_screen()) == NULL)
+  if((win = scrget()) == NULL)
     CRASH(SDL_GetError());
   if(timcount > 1000) {
     snprintf(phstr, 64, "PHY FPS: %i", phycount);
@@ -37,46 +37,44 @@ void benchprint()
 
 int main(int argc, char** argv)
 {
-  state_t state;
-  Uint32 t = 0;
-  Uint32 dt = 10;
+  state_t state; // main state IGNOT
+  Uint32 dt = 10; // gameloop vars
   Uint32 curtime = 0;
   Sint32 accum = 0;
 
-  state = state_main();
+  state = state_main(); // TODO: move this to init_states() or something
 
-  start_screen("TEST", 512, 512, false);
-  state.init();
-  switch_state(&state);
-  curtime = SDL_GetTicks();
+  scrstart("TEST", 512, 512, false); // window appearifies here
+  state.init(); // init our main-and-only (MANLY) gamestate
+  swstate(&state);
+  curtime = SDL_GetTicks(); // initial timerset
 
   while(run_counter) {
-    Uint32 newtime;
+    Uint32 newtime; // local gameloop vars
     Uint32 frametime;
     state_t* st;
 
-    st = CurrentState;
-    newtime = SDL_GetTicks();
+    st = curstate();
+    newtime = SDL_GetTicks(); // getting time for frame
     frametime = newtime - curtime;
     curtime = newtime;
 
     accum += frametime;
 
-    while(accum >= dt) {
+    while(accum >= dt) { // physics loop
       st->do_world(dt / 1000.0);
       accum -= dt;
-      t += dt;
       ++phycount;
     }
 
-    SDL_FillRect(get_screen(), NULL, 0);
+    SDL_FillRect(scrget(), NULL, 0); // rendering
     st->do_render();
     benchprint();
-    SDL_UpdateRect(get_screen(), 0, 0, 0, 0);
+    SDL_UpdateRect(scrget(), 0, 0, 0, 0);
 
-    if(st != CurrentState) {
+    if(st != curstate()) { // put state to sleep if it in not current anymore
       st->sleep();
-      CurrentState->wake();
+      curstate()->wake();
     }
     ++gfxcount;
     --run_counter;
@@ -84,7 +82,7 @@ int main(int argc, char** argv)
   }
   state.deinit();
 
-  stop_screen();
+  scrstop();
 
   return 0;
 }
