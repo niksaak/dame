@@ -25,9 +25,9 @@ typedef struct SDL_point {
 
 extern SDL_Point SDLpt(int x, int y);
 
-extern SDL_Point cpvSDL(cpVect vector, SDL_Surface* target, cpVect offset);
+extern SDL_Point cpvSDL(cpVect vector, const SDL_Surface* target, cpVect offset);
 
-extern cpVect SDLcpv(SDL_Point point, SDL_Surface* target, cpVect offset);
+extern cpVect SDLcpv(SDL_Point point, const SDL_Surface* target, cpVect offset);
 
 extern bool nullp(const void*);
 

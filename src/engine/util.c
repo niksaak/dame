@@ -16,19 +16,24 @@ SDL_Point SDLpt(int x, int y)
   return pt;
 }
 
-SDL_Point cpvSDL(cpVect vector, SDL_Surface* target, cpVect offset)
+SDL_Point cpvSDL(cpVect vector, const SDL_Surface* target, cpVect offset)
 {
   SDL_Point pt;
 
-  pt.x = (target->w / 2) + vector.x - offset.x;
+  pt.x = (target->w / 2) + vector.x + offset.x;
   pt.y = (target->h / 2) - vector.y + offset.y;
 
   return pt;
 }
 
-cpVect SDLcpv(SDL_Point point, SDL_Surface* target, cpVect offset)
+cpVect SDLcpv(SDL_Point point, const SDL_Surface* target, cpVect offset)
 {
-  return cpvzero; // FIXME
+  cpVect v;
+
+  v.x = -(target->w / 2) + point.x + offset.x;
+  v.y = (target->h / 2) - point.y + offset.y;
+
+  return v;
 }
 
 bool nullp(const void* ptr)
