@@ -2,42 +2,65 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
 
+#include "entities/entities.h"
 #include "engine/engine.h"
 #include "states.h"
 
-struct {
-  cpShape* shape;
-} ground;
+typedef struct EntityStack {
+  Uint16 top;
+  Entity* ents[];
+} EntityStack;
 
-struct {
-  cpBody* body;
-  cpShape* shape;
-} ball;
-
-cpVect gravity;
 cpSpace* space = NULL;
+EntityStack* estack = NULL;
+Uint16 pcount;
+
+static EntityStack* mkentstack() {
+  EntityStack* est = malloc(sizeof(EntityStack) + sizeof(Entity*) * 0x10000);
+
+  for(int i = 0; i <= 0xffff; est->ents[i++] = NULL);
+
+  return est;
+}
+
+static void delentstack(EntityStack* est) {
+  for(int i = 0; i <= 0xffff; delentity(est->ents[i++]));
+  free(est);
+}
+
+static void entpush(Entity* ent)
+{
+  if(nullp(estack->ents[estack->top++])) {
+    estack->ents[estack->top] = ent;
+  } else {
+    entpush(ent);
+  }
+}
+
+static void entkilldead()
+{
+  for(int i = 0; i <= 0xffff; i++) {
+    Entity* ent = estack->ents[i];
+
+    if(!nullp(ent)) {
+      if(ent->life == 1) {
+        delentity(ent);
+        estack->ents[i] = NULL;
+        pcount--;
+      } else {
+        ent->life--;
+      }
+    }
+  }
+}
+
+// callbacks:
 
 static void init()
 {
   space = cpSpaceNew();
   cpSpaceSetGravity(space, cpv(0, -100));
-  
-  ground.shape = cpSegmentShapeNew(space->staticBody,
-                     cpv(-20,5), cpv(20, -5), 0);
-  cpSpaceAddShape(space, ground.shape);
-  cpShapeSetFriction(ground.shape, 1);
-  cpShapeSetElasticity(ground.shape, 0.3);
-
-  ball.body = cpSpaceAddBody(
-                  space,
-                  cpBodyNew(1, cpMomentForCircle(1, 0, 5, cpvzero)));
-  cpBodySetPos(ball.body, cpv(0, 150));
-
-  ball.shape = cpSpaceAddShape(
-                   space,
-                   cpCircleShapeNew(ball.body, 5, cpvzero));
-  cpShapeSetFriction(ball.shape, 0.7);
-  cpShapeSetElasticity(ball.shape, 0.7);
+  estack = mkentstack();
 }
 
 static void wake()
@@ -55,6 +78,8 @@ static void do_world(cpFloat step)
         case SDL_QUIT:
           endgame();
           break;
+        case SDL_MOUSEBUTTONDOWN:
+          break;
         default:
           break;
       }
@@ -62,36 +87,39 @@ static void do_world(cpFloat step)
   }
 
   process_events();
-
+  entpush(mkentity_particle(space, cpvzero, 
+              cpv((ran_domo(1, 500) - 250) / 100.0,
+                  (ran_domo(1, 500) - 250) / 100.0)));
+  pcount++;
   cpSpaceStep(space, step);
+  entkilldead();
 }
 
 static void do_render()
 {
-  SDL_Surface* screen = scrget();
-  if(nullp(screen))
-    CRASH(SDL_GetError());
-
-  void draw_ground()
+  void draw_particle(Entity* ent)
   {
-    SDL_Point pta = cpvSDL(
-                        cpSegmentShapeGetA(ground.shape), screen, cpvzero);
-    SDL_Point ptb = cpvSDL(
-                        cpSegmentShapeGetB(ground.shape), screen, cpvzero);
-
-    aalineColor(screen, pta.x, pta.y, ptb.x, ptb.y, 0xffffffff);
+    SDL_Point pt = cpvSDL(cpBodyGetPos(ent->body), scrget(), cpvzero);
+    pixelColor(scrget(), pt.x, pt.y, ent->color);
   }
 
-  void draw_ball()
+  void say_pcount()
   {
-    Sint16 radius = cpCircleShapeGetRadius(ball.shape);
-    SDL_Point pos = cpvSDL(
-                        cpBodyGetPos(ball.body), screen, cpvzero);
-    aacircleColor(screen, pos.x, pos.y, radius, 0xffffffff);
+    static char str[64] = {0};
+
+    snprintf(str, 64, "PARTICLES: %u", pcount);
+    stringColor(scrget(), 10, scrget()->w - 30, str, 0xffffffff);
   }
 
-  draw_ground();
-  draw_ball();
+  for(int i = 0; i <= 0xffff; i++) {
+    if(!nullp(estack->ents[i])) {
+      cpVect pos = cpBodyGetPos(estack->ents[i]->body);
+      if(pos.x < scrget()->w / 2 && pos.y < scrget()->h / 2)
+        draw_particle(estack->ents[i]);
+    }
+  }
+
+  say_pcount();
 }
 
 static void sleep()
@@ -99,9 +127,7 @@ static void sleep()
 
 static void deinit()
 {
-  cpShapeFree(ball.shape);
-  cpBodyFree(ball.body);
-  cpShapeFree(ground.shape);
+  delentstack(estack);
   cpSpaceFree(space);
 }
 
