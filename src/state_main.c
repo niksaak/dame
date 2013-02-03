@@ -14,6 +14,8 @@ typedef struct EntityStack {
 cpSpace* space = NULL;
 EntityStack* estack = NULL;
 Uint16 pcount;
+Uint16 mousex;
+Uint16 mousey;
 
 static EntityStack* mkentstack() {
   EntityStack* est = malloc(sizeof(EntityStack) + sizeof(Entity*) * 0x10000);
@@ -72,13 +74,20 @@ static void do_world(cpFloat step)
   {
     SDL_Event e;
 
-    if(SDL_PollEvent(&e)) {
+    while(SDL_PollEvent(&e)) {
       switch(e.type)
       {
         case SDL_QUIT:
           endgame();
           break;
-        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEMOTION:
+          mousex = e.motion.x;
+          mousey = e.motion.y;
+          entpush(mkentity_particle(space,
+                      SDLcpv(SDLpt(e.motion.x, e.motion.y), scrget(), cpvzero), 
+                      cpv((ran_domo(1, 500) - 250) / 100.0,
+                          (ran_domo(1, 500) - 250) / 100.0)));
+          pcount++;
           break;
         default:
           break;
@@ -87,10 +96,6 @@ static void do_world(cpFloat step)
   }
 
   process_events();
-  entpush(mkentity_particle(space, cpvzero, 
-              cpv((ran_domo(1, 500) - 250) / 100.0,
-                  (ran_domo(1, 500) - 250) / 100.0)));
-  pcount++;
   cpSpaceStep(space, step);
   entkilldead();
 }
@@ -103,12 +108,17 @@ static void do_render()
     pixelColor(scrget(), pt.x, pt.y, ent->color);
   }
 
-  void say_pcount()
+  void sayings()
   {
-    static char str[64] = {0};
+    static char pstr[64] = {0};
+    static char mstr[128] = {0};
+    cpVect cpmouse = SDLcpv(SDLpt(mousex, mousey), scrget(), cpvzero);
 
-    snprintf(str, 64, "PARTICLES: %u", pcount);
-    stringColor(scrget(), 10, scrget()->w - 30, str, 0xffffffff);
+    snprintf(pstr, 64, "PARTICLES: %u", pcount);
+    snprintf(mstr, 64, "SDL: (%u, %u); cp: (%0f, %0f)", mousex, mousey,
+        cpmouse.x, cpmouse.y);
+    stringColor(scrget(), 10, scrget()->w - 30, pstr, 0xffffffff);
+    stringColor(scrget(), 10, scrget()->w - 40, mstr, 0xffffffff);
   }
 
   for(int i = 0; i <= 0xffff; i++) {
@@ -119,7 +129,7 @@ static void do_render()
     }
   }
 
-  say_pcount();
+  sayings();
 }
 
 static void sleep()
