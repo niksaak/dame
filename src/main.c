@@ -4,10 +4,8 @@
 
 int main(int argc, char** argv)
 {
-  state_t state; // main state IGNOT
-
-  state = state_main(); // TODO: move this to init_states() or something
-
+  state_t state = state_main(); // TODO: move this to init_states() or something
+  
   state.init(); // init our main-and-only (MANLY) gamestate
   swstate(&state);
 
