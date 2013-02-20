@@ -2,9 +2,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
 
-#include "entities/entities.h"
+#include "entities/entity.h"
 #include "engine/engine.h"
-#include "states.h"
 
 typedef struct EntityStack {
   Uint16 top;
@@ -89,8 +88,16 @@ static void do_world(cpFloat step)
                           (ran_domo(1, 500) - 250) / 100.0)));
           pcount++;
           break;
-        default:
+        case SDL_KEYUP:
+          switch(e.key.keysym.sym)
+          {
+            case SDLK_SPACE:
+              swstate("second");
+              break;
+            default: break;
+          }
           break;
+        default: break;
       }
     }
   }
@@ -141,9 +148,9 @@ static void deinit()
   cpSpaceFree(space);
 }
 
-state_t state_main()
+state_t* state_main()
 {
-  state_t s;
+  static state_t s = {0};
 
   s.init = &init;
   s.wake = &wake;
@@ -152,6 +159,6 @@ state_t state_main()
   s.sleep = &sleep;
   s.deinit = &deinit;
 
-  return s;
+  return &s;
 }
 

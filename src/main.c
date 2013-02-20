@@ -1,19 +1,24 @@
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include "engine/engine.h"
-#include "states.h"
+#include "state_main.h"
 #include "main.h"
 
 int main(int argc, char** argv)
 {
-  state_t state = state_main(); // TODO: move this to init_states() or something
+  register_state("main", state_main());
+  init_states();
   
-  state.init(); // init our main-and-only (MANLY) gamestate
-  swstate(&state);
+  swstate("main");
 
   scrstart("TEST", 512, 512, false); // window appearifies here
   gameloop(scrget());
   scrstop();
 
-  state.deinit();
+  deinit_states();
+  clear_registry();
 
   return 0;
 }
