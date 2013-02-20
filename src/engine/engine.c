@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <assert.h>
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_gfxPrimitives.h>
@@ -38,6 +39,8 @@ static void render(SDL_Surface* screen, void (*renderf)())
 
 void gameloop(SDL_Surface* screen)
 {
+  assert(!nullp(screen));
+
   Uint32 dt = 10;
   Uint32 curt = SDL_GetTicks();
   Uint32 accum = 0;
