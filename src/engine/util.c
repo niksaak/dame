@@ -43,6 +43,26 @@ bool nullp(const void* ptr)
   return false;
 }
 
+void promulgate(const char* funname, bool crushing, const char* warning, ...)
+{
+  static char crushstr[] = "CRUSHING ERROR @ %s: ";
+  static char warnstr[] = "WARNING @ %s: ";
+  char* errstr = warnstr;
+  va_list varargs;
+
+  if(crushing)
+    errstr = crushstr;
+
+  va_start(varargs, warning);
+  fprintf(stderr, errstr, funname);
+  vfprintf(stderr, warning, varargs);
+  fputc('\n', stderr);
+  va_end(varargs);
+
+  if(crushing)
+    exit(EXIT_FAILURE);
+}
+
 void warn(const char* funname, const char* warning)
 {
   fprintf(stderr, "%s: WARNING: %s\n", funname, warning);
@@ -62,6 +82,7 @@ int ran_domo(Uint32 min, Uint32 max)
 
   if(domo == RAND_MAX)
     return ran_domo(min, max);
+
   int range = max - min;
   int rem = RAND_MAX % range;
   int bucket = RAND_MAX / range;

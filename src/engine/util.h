@@ -10,13 +10,15 @@
 #include <stdio.h>
 #define DEBUG(...) \
   fprintf(stderr, __VA_ARGS__);
+#else
+#define DEBUG(...)
 #endif
 
-#define WARN(w) \
-  warn(__func__, w);
+#define WARN(...) \
+  promulgate(__func__, false, __VA_ARGS__);
 
-#define CRASH(r) \
-  crash(__func__, r);
+#define CRASH(...) \
+  promulgate(__func__, true, __VA_ARGS__);
 
 typedef struct SDL_point {
   int x;
@@ -30,6 +32,9 @@ extern SDL_Point cpvSDL(cpVect vector, const SDL_Surface* target, cpVect offset)
 extern cpVect SDLcpv(SDL_Point point, const SDL_Surface* target, cpVect offset);
 
 extern bool nullp(const void*);
+
+extern void
+promulgate(const char* funname, bool crushing, const char* warning, ...);
 
 extern void warn(const char*, const char*);
 
