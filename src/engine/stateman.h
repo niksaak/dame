@@ -2,6 +2,8 @@
 
 #include <chipmunk/chipmunk.h>
 
+#define STATE_ENTRY_NAME_LEN 64
+
 typedef struct state {
   void (*init)();
 
@@ -15,7 +17,15 @@ typedef struct state {
   void (*deinit)();
 } state_t;
 
-extern state_t* curstate();
+extern void register_state(const char* name, state_t* state);
 
-extern void swstate(state_t* other_state);
+extern void init_states(void);
+
+extern void deinit_states(void);
+
+extern void clear_registry(void);
+
+extern state_t* curstate(void);
+
+extern void swstate(const char* name);
 
