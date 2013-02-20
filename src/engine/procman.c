@@ -66,7 +66,8 @@ void delproclist(Process* list)
   free(list);
 }
 
-void procdo(Process* list) {
+void procdo(Process* list)
+{
   assert(!nullp(list));
 
   for(Process* cons = list; !nullp(cons); list = cons = cons->next)
