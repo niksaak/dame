@@ -34,7 +34,7 @@ static state_t* find_state(const char* name)
     } else if(!strcmp(name, list->node.name)) {
       return list->node.state;
     } else {
-      return find_state(name);
+      return find(list->next);
     }
   }
 
@@ -92,5 +92,12 @@ state_t* curstate(void)
 
 void swstate(const char* name)
 {
-  CurrentState = find_state(name);
+  state_t* new_state = find_state(name);
+  
+  if(nullp(new_state))
+    CRASH("Can not switch to state %s because it does not exist", name);
+  if(!nullp(CurrentState))
+    CurrentState->sleep();
+  new_state->wake();
+  CurrentState = new_state;
 }
