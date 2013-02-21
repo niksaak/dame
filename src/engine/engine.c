@@ -46,14 +46,11 @@ void gameloop(SDL_Surface* screen)
   Uint32 accum = 0;
 
   while(running) {
-    Uint32 newt;
-    Uint32 framet;
-    state_t* st;
+    Uint32 newt = SDL_GetTicks();
+    Uint32 framet = newt - curt;
+    state_t* st = curstate();
 
     ++gfxcount;
-    st = curstate();
-    newt = SDL_GetTicks();
-    framet = newt - curt;
     curt = newt;
     accum += framet;
 
@@ -64,7 +61,7 @@ void gameloop(SDL_Surface* screen)
     }
 
     render(screen, st->do_render);
-    
+
     if(st != curstate()) {
       st->sleep();
       curstate()->wake();
@@ -77,3 +74,4 @@ void endgame()
 {
   running = false;
 }
+
