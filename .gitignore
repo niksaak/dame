@@ -3,6 +3,10 @@
 !.gitignore
 tags
 
+#bin-dirs
+bin/*
+lib/*
+
 #vim
 *.swp
 
