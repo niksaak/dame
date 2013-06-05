@@ -3,41 +3,42 @@ cmake_policy(SET CMP0001 NEW)
 cmake_policy(SET CMP0008 NEW)
 cmake_policy(SET CMP0015 NEW)
 
-project(DAME)
+# Project
 
-if(NOT ${CMAKE_BUILD_TYPE})
+project(dame)
+
+find_package(OpenGL REQUIRED)
+
+if(NOT CMAKE_BUILD_TYPE)
+  message(STATUS "Build type defaults to Debug...")
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-find_package(SDL)
+# Files
 
-set(CMAKE_C_FLAGS "-Wall -std=gnu11")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -DDEBUG_MODE")
-set(CMAKE_C_FLAGS_RELEASE "-O3 -DNDEBUG")
+file(GLOB dame_sources "src/*.c")
 
-include_directories("include" "src" ${SDL_INCLUDE_DIR})
+# Exe
 
-file(GLOB DAME_source_engine "src/engine/*.c")
-file(GLOB DAME_source_entities "src/entities/*.c")
-file(GLOB DAME_source_states "src/state_*.c")
-file(GLOB DAME_source_main "src/main.c")
-
-link_directories(lib)
-
-add_custom_target(DAME_engine DEPENDS ${DAME_source_engine})
-add_custom_target(DAME_entities DEPENDS DAME_engine ${DAME_source_entities})
-add_custom_target(DAME_states DEPENDS DAME_engine DAME_entities
-  ${DAME_source_states})
-add_custom_target(DAME_main DEPENDS DAME_engine DAME_entities DAME_states 
-  ${DAME_source_main})
+include_directories(${OPENGL_INCLUDE_DIR})
 
 make_directory("bin")
-add_executable("bin/${CMAKE_PROJECT_NAME}"
-  ${DAME_source_engine} ${DAME_source_entities} ${DAME_source_states}
-  ${DAME_source_main})
-add_dependencies("bin/${CMAKE_PROJECT_NAME}"
-  DAME_engine DAME_entities DAME_states DAME_main)
+add_executable("bin/${CMAKE_PROJECT_NAME}" ${dame_sources})
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug") # use own chipmunk when debugging
+  link_directories(lib)
+endif()
 target_link_libraries("bin/${CMAKE_PROJECT_NAME}"
-  -Wl,-Bstatic chipmunk SDL_gfx m
-  -Wl,-Bdynamic ${SDL_LIBRARY})
+  chipmunk m glfw ${OPENGL_LIBRARIES})
+
+# Compiler
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c11")
+
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-diagnostics-show-caret")
+endif()
+
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -ffast-math")
+

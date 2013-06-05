@@ -4,6 +4,7 @@
 tags
 
 #bin-dirs
+build/*
 bin/*
 lib/*
 
@@ -21,3 +22,10 @@ tramp
 
 #compiler
 *.o
+
+#cmake
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+install_manifest.txt
+
