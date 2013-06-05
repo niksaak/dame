@@ -1,6 +1,13 @@
 # DAME
 *distance and modular entities*
 
-Current version: **0.02+0.09i**
+## Concept
+*There shall be wings*
 
-Working on: **Game.** All of it.
+DAME is about building, docking together and flying various modular thingies
+**in space**. Asteroid mining, planet destroying and trippy witchspace(ing) are
+options too.
+
+Current version: **0.0.921** <br />
+Working on: base engine and utilities.
+
