@@ -4,70 +4,13 @@
 
 #include "main.h"
 
-/* Tools */
-
-void GLFWCALL on_resize(int width, int height)
-{
-  GLfloat aspect = (GLfloat)width / (GLfloat)height;
-
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glViewport(0, 0, width, height);
-  if(width >= height) {
-    glOrtho(-aspect, aspect, -1, 1, -1, 1);
-  } else {
-    glOrtho(-1, 1, 1 / -aspect, 1 / aspect, -1, 1);
-  }
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-}
-
-int GLFWCALL on_close(void)
-{ // TODO: move this somewhere else
-  running = 0;
-  return 1;
-}
-
-static int setup_gl(void)
-{
-  glShadeModel(GL_SMOOTH);
-  glClearColor(0, 0, 0, 0);
-  glClearDepth(1);
-  glEnable(GL_ALPHA_TEST);
-  glAlphaFunc(GL_LEQUAL, 1);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  return 0;
-}
-
-int setup_gfx(int width, int height)
-{
-  if(!glfwInit()) {
-    return 1;
-  }
-  if(!glfwOpenWindow(width, height, 4, 4, 4, 4, 24, 8, GLFW_WINDOW)) {
-    glfwTerminate();
-    return 1;
-  }
-  glfwSetWindowCloseCallback(on_close);
-  glfwSetWindowSizeCallback(on_resize);
-  setup_gl();
-  on_resize(width, height);
-  return 0;
-}
-
-int render(void)
-{
-  glfwSwapBuffers();
-  return 0;
-}
-
 /* Drawing primitives */
 
-int draw_points(vec2_t* coords, size_t count)
+int draw_points(const cpVect coords[], size_t count)
 {
+  if(coords == NULL) {
+    return -1; // nurupo~
+  }
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_POINTS, 0, count);
@@ -75,8 +18,11 @@ int draw_points(vec2_t* coords, size_t count)
   return 0;
 }
 
-int draw_polyline(vec2_t* coords, size_t count)
+int draw_polyline(const cpVect coords[], size_t count)
 {
+  if(coords == NULL) {
+    return -1; // nurupo~
+  }
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_LINE_STRIP, 0, count);
@@ -84,8 +30,11 @@ int draw_polyline(vec2_t* coords, size_t count)
   return 0;
 }
 
-int draw_polygon(vec2_t* coords, size_t count)
+int draw_polygon(const cpVect coords[], size_t count)
 {
+  if(coords == NULL) {
+    return -1; // nurupo~
+  }
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_LINE_LOOP, 0, count);
@@ -93,25 +42,71 @@ int draw_polygon(vec2_t* coords, size_t count)
   return 0;
 }
 
-/*
-int draw_circle(vec2_t pos, GLdouble radius)
+static cpVect decasteljau(const cpVect vects[], size_t count, double t)
 {
-  static vec2_t verts[512];
-  static const size_t vertc = sizeof verts / sizeof (vec2_t);
+  cpVect v[count];
 
-  for(int i = 0; i < circle_vertc; i++) {
-    GLdouble theta = 2.0 * M_PI * i / circle_vertc;
-    circle_verts[i][0] = pos[0] + radius * cos(theta);
-    circle_verts[i][1] = pos[1] + radius * sin(theta);
+  for(int i = 0; i < count; i++) {
+    v[i] = vects[i];
   }
-  return draw_polygon(verts, vertc);
-}
-*/
+  for(int k = 1; k < count; k++) {
+    for(int i = 0; i < (count - k); i++) {
+      v[i] = cpvlerp(v[i], v[i + 1], t);
+    }
+  }
 
-int draw_circle(vec2_t pos, GLdouble radius)
+  return v[0];
+}
+
+int draw_curve(const cpVect coords[], size_t count)
+{
+  int segc = 0;
+  int ret;
+  cpVect* curve;
+
+  if(coords == NULL) {
+    return -1; // nurupo~
+  }
+  for(int i = 0, j = 1; j < count; i++, j++) {
+    segc += ceil(cpvdist(coords[i], coords[j]) * 16);
+  }
+  curve = malloc(sizeof (cpVect) * segc);
+  if(curve == NULL) {
+    return -1; // malloc error
+  }
+  for(int i = 0; i < segc; i++) {
+    curve[i] = decasteljau(coords, count, (double)i / segc);
+  }
+  ret = draw_polyline(curve, segc);
+  free(curve);
+  return ret;
+}
+
+int draw_vects(DrawingMode mode, const cpVect vects[], size_t count)
+{
+  if(vects == NULL) {
+    return -1; // nurupo~
+  }
+  switch(mode) {
+    case DRAW_POINTS:
+      return draw_points(vects, count);
+    case DRAW_POLYLINE:
+      return draw_polyline(vects, count);
+    case DRAW_CURVE:
+      return draw_curve(vects, count);
+    case DRAW_POLYGON:
+      return draw_polygon(vects, count);
+    default:
+      return -1; // bad enum
+  }
+
+  return -1;
+}
+
+int draw_circle(cpVect pos, double radius)
 { // algorithm from here: http://slabode.exofire.net/circle_draw.shtml
-  static vec2_t verts[360];
-  static const size_t vertc = sizeof verts / sizeof (vec2_t);
+  static cpVect verts[360];
+  static const size_t vertc = sizeof verts / sizeof (cpVect);
   double theta = 2 * M_PI / vertc;
   double costh = cos(theta);
   double sinth = sin(theta);
@@ -120,8 +115,8 @@ int draw_circle(vec2_t pos, GLdouble radius)
   double y = 0;
 
   for(int i = 0; i < vertc; i++) {
-    verts[i][0] = x + pos[0];
-    verts[i][1] = y + pos[1];
+    verts[i].x = x + pos.x;
+    verts[i].y = y + pos.y;
 
     t = x;
     x = costh * x - sinth * y;
@@ -131,16 +126,30 @@ int draw_circle(vec2_t pos, GLdouble radius)
   return draw_polygon(verts, vertc);
 }
 
-int draw_square(vec2_t pos, GLdouble side)
+int draw_square(cpVect pos, double side)
 {
   GLdouble r = side / 2.0;
-  GLdouble x = pos[0];
-  GLdouble y = pos[1];
-  vec2_t square[4] = {
+  GLdouble x = pos.x;
+  GLdouble y = pos.y;
+  cpVect square[4] = {
     { x + r, y + r },
     { x + r, y - r },
     { x - r, y - r },
     { x - r, y + r }
+  };
+
+  return draw_polygon(square, 4);
+}
+
+int draw_rectangle(cpVect pos, double width, double height)
+{
+  GLdouble cw = width / 2.0;
+  GLdouble ch = height / 2.0;
+  cpVect square[4] = {
+    { pos.x + cw, pos.y + ch },
+    { pos.x + cw, pos.y - ch },
+    { pos.x - cw, pos.y - ch },
+    { pos.x - cw, pos.y + ch }
   };
 
   return draw_polygon(square, 4);
