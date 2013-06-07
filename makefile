@@ -1,8 +1,10 @@
 # short makefile for me to be able to use :make from vim
 
 CC := clang
+CXX := clang
 BUILD_DIR := build
-CMAKE_CACHE := $(BUILD_DIR)/CMakeCache.txt
+
+.PHONY: all run make configure clean
 
 all: make
 
@@ -12,10 +14,9 @@ run:
 make: configure
 	$(MAKE) -C $(BUILD_DIR)
 
-configure: $(CMAKE_CACHE)
-
-$(CMAKE_CACHE):
-	@mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && CC=$(CC) cmake ..
+configure:
+	@mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && \
+	  CC=$(CC) CXX=$(CXX) cmake ..
 
 clean:
 	@if   [ -a $(CMAKE_CACHE) ];        \
