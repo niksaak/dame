@@ -1,0 +1,9 @@
+Distance And Modular Entities
+TODO file.
+
+2013-06-07 [ ] TODO: create basic game entities, with support for drawing,
+                physicsing and docking
+
+2013-06-05 [x] TODO: write function with prototype
+                int draw_vects(cpVect vects[], DrawMode mode, size_t count),
+                drawing array of `count` vects in desired mode.
