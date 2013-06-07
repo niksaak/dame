@@ -2,31 +2,27 @@
 #include <stdio.h>
 
 #include <GL/glfw.h>
+#include "sys.h"
 #include "draw.h"
 
 int running = 1;
 
-vec2_t triangle[] = {
+cpVect triangle[] = {
   { -1, -1 },
   {  0,  1 },
   {  1, -1 }
 };
 
-int draw_scene(void)
-{
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  draw_polygon(triangle, 3);
-  draw_circle((vec2_t){0,0}, 0.9);
-  draw_square((vec2_t){0,0}, 1);
-  return 0;
-}
-
 void demo1(void)
 {
+  double m_ball = 1;
+  double r_ball = 0.05; // ball radius
+  double i_ball = cpMomentForCircle(m_ball, 0, r_ball, cpvzero); // ball momentum
   cpSpace* space = cpSpaceNew();
   cpBody* ball =
-    cpSpaceAddBody(space, cpBodyNew(1, cpMomentForCircle(1, 0, 0.1, cpvzero)));
-  cpShape* shape = cpSpaceAddShape(space, cpCircleShapeNew(ball, 0.1, cpvzero));
+    cpSpaceAddBody(space, cpBodyNew(m_ball, i_ball));
+  cpShape* shape =
+    cpSpaceAddShape(space, cpCircleShapeNew(ball, r_ball, cpvzero));
   double step = 1.0 / 60;
 
   cpSpaceSetGravity(space, cpvzero);
@@ -34,11 +30,10 @@ void demo1(void)
   cpShapeSetFriction(shape, 0.7);
 
   while(glfwGetKey(GLFW_KEY_SPACE) == GLFW_RELEASE && running) {
-    cpVect vec = cpBodyGetPos(ball);
-    vec2_t pos = { vec.x, vec.y };
+    cpVect pos = cpBodyGetPos(ball);
 
     glClear(GL_COLOR_BUFFER_BIT);
-    draw_circle(pos, 0.1);
+    draw_circle(pos, r_ball);
     glfwSwapBuffers();
 
     if(glfwGetKey(GLFW_KEY_UP)) {
@@ -52,6 +47,9 @@ void demo1(void)
     }
     if(glfwGetKey(GLFW_KEY_RIGHT)) {
       cpBodyApplyImpulse(ball, cpv(0.1, 0), cpvzero);
+    }
+    if(glfwGetKey(GLFW_KEY_ENTER)) {
+      cpBodySetPos(ball, cpv(0, 0));
     }
     if(glfwGetKey('C')) {
       cpBodyResetForces(ball);
@@ -78,15 +76,6 @@ int main(int argc, char** argv)
   if(setup_gfx(512, 512)) {
     return 1;
   }
-  /*
-  while(glfwGetKey(GLFW_KEY_SPACE) == GLFW_RELEASE && running) {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    draw_polygon(triangle, 3);
-    draw_circle((vec2_t){0,0}, 0.9);
-    draw_square((vec2_t){0,0}, 1);
-    render();
-  }
-  */
   demo1();
   glfwTerminate();
 
