@@ -1,10 +1,12 @@
-# short makefile for me to be able to use :make from vim
-
 CC := clang
 CXX := clang
+BUILD := Debug
 BUILD_DIR := build
+PROJECT_DIR := $(realpath $(shell pwd)/..)
 
-.PHONY: all run make configure clean
+MAKEFLAGS += --no-print-directory
+
+.PHONY: all run make configure clean cleanse
 
 all: make
 
@@ -12,15 +14,19 @@ run:
 	$(BUILD_DIR)/bin/dame
 
 make: configure
-	$(MAKE) -C $(BUILD_DIR)
+	@$(MAKE) -C $(BUILD_DIR)
 
 configure:
 	@mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && \
-	  CC=$(CC) CXX=$(CXX) cmake ..
+	  CC=$(CC) CXX=$(CXX) \
+	  cmake -DCMAKE_BUILD_TYPE=$(BUILD) \
+	        -DCMAKE_PREFIX_PATH=$(PROJECT_DIR) \
+	        -DBUILD_DEMOS=OFF -DBUILD_SHARED=OFF -DINSTALL_STATIC=OFF \
+		..
 
 clean:
-	@if   [ -a $(CMAKE_CACHE) ];        \
-	 then make -C $(BUILD_DIR) clean && \
-	      rm -rf $(BUILD_DIR)/* ;       \
-	 fi
+	@make -C $(BUILD_DIR) clean
+
+cleanse: clean
+	@rm -rf $(BUILD_DIR)/*
 

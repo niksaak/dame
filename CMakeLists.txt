@@ -11,8 +11,17 @@ find_package(OpenGL REQUIRED)
 
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "Build type defaults to Debug...")
-  set(CMAKE_BUILD_TYPE Debug)
+  set(CMAKE_BUILD_TYPE "Debug" CACHE STRING
+      "Build type")
 endif()
+
+# Chipmunk
+
+set(chipmunk_dir "modules/chipmunk2d" CACHE PATH
+    "Path to the Chipmunk2D library")
+set(chipmunk_include_dir "${chipmunk_dir}/include")
+
+add_subdirectory(${chipmunk_dir})
 
 # Files
 
@@ -20,16 +29,18 @@ file(GLOB dame_sources "src/*.c")
 
 # Exe
 
-include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(${OPENGL_INCLUDE_DIR} ${chipmunk_include_dir})
 
 make_directory("bin")
 add_executable("bin/${CMAKE_PROJECT_NAME}" ${dame_sources})
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug") # use own chipmunk when debugging
-  link_directories(lib)
-endif()
+#if(CMAKE_BUILD_TYPE STREQUAL "Debug") # use own chipmunk when debugging
+#  message(STATUS "Locating chipmunk in ${CMAKE_PREFIX_PATH}")
+#  find_library(chipmunk "chipmunk" "${CMAKE_PREFIX_PATH}/lib")
+#  message(STATUS "chipmunk path: ${chipmunk}")
+#endif()
 target_link_libraries("bin/${CMAKE_PROJECT_NAME}"
-  chipmunk m glfw ${OPENGL_LIBRARIES})
+  chipmunk_static m glfw ${OPENGL_LIBRARIES})
 
 # Compiler
 
