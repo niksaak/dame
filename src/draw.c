@@ -6,7 +6,7 @@
 
 /* Drawing primitives */
 
-int draw_points(const cpVect coords[], size_t count)
+int draw_points(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
     return -1; // nurupo~
@@ -18,7 +18,7 @@ int draw_points(const cpVect coords[], size_t count)
   return 0;
 }
 
-int draw_polyline(const cpVect coords[], size_t count)
+int draw_polyline(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
     return -1; // nurupo~
@@ -30,7 +30,7 @@ int draw_polyline(const cpVect coords[], size_t count)
   return 0;
 }
 
-int draw_polygon(const cpVect coords[], size_t count)
+int draw_polygon(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
     return -1; // nurupo~
@@ -42,35 +42,35 @@ int draw_polygon(const cpVect coords[], size_t count)
   return 0;
 }
 
-static cpVect decasteljau(const cpVect vects[], size_t count, double t)
+static Vec decasteljau(const Vec vects[], size_t count, double t)
 {
-  cpVect v[count];
+  Vec v[count];
 
   for(int i = 0; i < count; i++) {
     v[i] = vects[i];
   }
   for(int k = 1; k < count; k++) {
     for(int i = 0; i < (count - k); i++) {
-      v[i] = cpvlerp(v[i], v[i + 1], t);
+      v[i] = veclerp(v[i], v[i + 1], t);
     }
   }
 
   return v[0];
 }
 
-int draw_curve(const cpVect coords[], size_t count)
+int draw_curve(const Vec coords[], size_t count)
 {
   int segc = 0;
   int ret;
-  cpVect* curve;
+  Vec* curve;
 
   if(coords == NULL) {
     return -1; // nurupo~
   }
   for(int i = 0, j = 1; j < count; i++, j++) {
-    segc += ceil(cpvdist(coords[i], coords[j]) * 16);
+    segc += ceil(vecdist(coords[i], coords[j]) * 16);
   }
-  curve = malloc(sizeof (cpVect) * segc);
+  curve = malloc(sizeof (Vec) * segc);
   if(curve == NULL) {
     return -1; // malloc error
   }
@@ -82,7 +82,7 @@ int draw_curve(const cpVect coords[], size_t count)
   return ret;
 }
 
-int draw_vects(DrawingMode mode, const cpVect vects[], size_t count)
+int draw_vects(DrawingMode mode, const Vec vects[], size_t count)
 {
   if(vects == NULL) {
     return -1; // nurupo~
@@ -103,10 +103,12 @@ int draw_vects(DrawingMode mode, const cpVect vects[], size_t count)
   return -1;
 }
 
-int draw_circle(cpVect pos, double radius)
+extern inline int draw(Drawing* drawing);
+
+int draw_circle(Vec pos, double radius)
 { // algorithm from here: http://slabode.exofire.net/circle_draw.shtml
-  static cpVect verts[360];
-  static const size_t vertc = sizeof verts / sizeof (cpVect);
+  static Vec verts[360];
+  static const size_t vertc = sizeof verts / sizeof (Vec);
   double theta = 2 * M_PI / vertc;
   double costh = cos(theta);
   double sinth = sin(theta);
@@ -126,12 +128,12 @@ int draw_circle(cpVect pos, double radius)
   return draw_polygon(verts, vertc);
 }
 
-int draw_square(cpVect pos, double side)
+int draw_square(Vec pos, double side)
 {
   GLdouble r = side / 2.0;
   GLdouble x = pos.x;
   GLdouble y = pos.y;
-  cpVect square[4] = {
+  Vec square[4] = {
     { x + r, y + r },
     { x + r, y - r },
     { x - r, y - r },
@@ -141,11 +143,11 @@ int draw_square(cpVect pos, double side)
   return draw_polygon(square, 4);
 }
 
-int draw_rectangle(cpVect pos, double width, double height)
+int draw_rectangle(Vec pos, double width, double height)
 {
   GLdouble cw = width / 2.0;
   GLdouble ch = height / 2.0;
-  cpVect square[4] = {
+  Vec square[4] = {
     { pos.x + cw, pos.y + ch },
     { pos.x + cw, pos.y - ch },
     { pos.x - cw, pos.y - ch },
