@@ -77,3 +77,15 @@ inline int draw(const Drawing* drawing)
   return -1;
 }
 
+inline int drawarr(const Drawing* array)
+{ // draw array of drawings
+  int ret = 0;
+
+  do {
+    ret |= draw(array);
+    array += sizeof (Drawing);
+  } while((array->mode != DRAW_END) & !ret);
+
+  return ret;
+}
+

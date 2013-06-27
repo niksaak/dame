@@ -102,7 +102,7 @@ int draw_vects(DrawingMode mode, const Vec vects[], size_t count)
 }
 
 int draw_circle(Vec pos, double radius)
-{ // algorithm from here: http://slabode.exofire.net/circle_draw.shtml
+{ // drawing algorithm from here: http://slabode.exofire.net/circle_draw.shtml
   static Vec verts[360];
   static const size_t vertc = sizeof verts / sizeof (Vec);
   double theta = 2 * M_PI / vertc;
@@ -154,4 +154,6 @@ int draw_rectangle(Vec pos, double width, double height)
 }
 
 extern inline int draw(const Drawing* drawing);
+
+extern inline int draw(const Drawing* array);
 
