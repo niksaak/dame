@@ -6,6 +6,7 @@
 #include "vector.h"
 
 typedef enum DrawingMode {
+  DRAW_END = 0, // null-terminator for drawing arrays
   // Arrays
   DRAW_POINTS,
   DRAW_POLYLINE,
@@ -18,22 +19,22 @@ typedef enum DrawingMode {
   DRAW_RECTANGLE
 } DrawingMode;
 
-typedef struct ADrawing {
-  enum DrawingMode mode;
-  size_t count;
-  Vec vecs[];
+typedef struct VDrawing { // Vertices drawing
+  DrawingMode mode;
+  size_t count; // vertices count
+  Vec* vecs; // vertises array
 } ADrawing;
 
-typedef struct RDrawing {
-  enum DrawingMode mode;
-  Vec pos;
-  double params[2];
+typedef struct PDrawing { // Parameterized drawing
+  DrawingMode mode;
+  Vec pos; // position for the center of drawing
+  double params[2]; // params for drawing
 } RDrawing;
 
 typedef union Drawing {
-  enum DrawingMode mode;
-  ADrawing ard;
-  RDrawing red;
+  DrawingMode mode;
+  ADrawing ver;
+  RDrawing par;
 } Drawing;
 
 /* Drawing primitives */
@@ -49,27 +50,27 @@ int draw_circle(Vec pos, double radius);
 int draw_square(Vec pos, double side);
 int draw_rectangle(Vec pos, double width, double height);
 
-inline int draw(Drawing* drawing)
+inline int draw(const Drawing* drawing)
 {
   if(drawing == NULL) {
     return -1; // nurupo~
   }
   switch(drawing->mode) {
     case DRAW_POINTS:
-      return draw_points(drawing->ard.vecs, drawing->ard.count);
+      return draw_points(drawing->ver.vecs, drawing->ver.count);
     case DRAW_POLYLINE:
-      return draw_polyline(drawing->ard.vecs, drawing->ard.count);
+      return draw_polyline(drawing->ver.vecs, drawing->ver.count);
     case DRAW_POLYGON:
-      return draw_polygon(drawing->ard.vecs, drawing->ard.count);
+      return draw_polygon(drawing->ver.vecs, drawing->ver.count);
     case DRAW_CURVE:
-      return draw_curve(drawing->ard.vecs, drawing->ard.count);
+      return draw_curve(drawing->ver.vecs, drawing->ver.count);
     case DRAW_CIRCLE:
-      return draw_circle(drawing->red.pos, drawing->red.params[0]);
+      return draw_circle(drawing->par.pos, drawing->par.params[0]);
     case DRAW_SQUARE:
-      return draw_square(drawing->red.pos, drawing->red.params[0]);
+      return draw_square(drawing->par.pos, drawing->par.params[0]);
     case DRAW_RECTANGLE:
-      return draw_rectangle(drawing->red.pos,
-                            drawing->red.params[0], drawing->red.params[1]);
+      return draw_rectangle(drawing->par.pos,
+                            drawing->par.params[0], drawing->par.params[1]);
     default:
       return -1; // bad enum
   }

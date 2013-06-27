@@ -103,8 +103,6 @@ int draw_vects(DrawingMode mode, const Vec vects[], size_t count)
   return -1;
 }
 
-extern inline int draw(Drawing* drawing);
-
 int draw_circle(Vec pos, double radius)
 { // algorithm from here: http://slabode.exofire.net/circle_draw.shtml
   static Vec verts[360];
@@ -156,4 +154,6 @@ int draw_rectangle(Vec pos, double width, double height)
 
   return draw_polygon(square, 4);
 }
+
+extern inline int draw(const Drawing* drawing);
 
