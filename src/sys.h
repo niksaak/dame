@@ -1,5 +1,7 @@
 #pragma once
 
+int running;
+
 int setup_gfx(const char* title, int width, int height);
   // do necessary preparations and initializations
 
@@ -9,7 +11,7 @@ int stop_gfx(void);
 int keypress(int key);
   // returns nonzero if key is pressed
 
-int wait(int ms);
+int wait(double ms);
   // wait for some miliseconds
 
 int render(void);

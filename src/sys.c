@@ -3,10 +3,9 @@
 #include <time.h>
 #include <GLFW/glfw3.h>
 
-#include "main.h"
-
 /* Internals */
 
+int running = 1;
 double the_zoom_factor = 1.0;
 double the_scr_aspect = 1.0;
 GLFWwindow* the_window; // the main window
@@ -31,7 +30,7 @@ void on_resize(GLFWwindow* win, int width, int height)
 }
 
 void on_close(GLFWwindow* win)
-{ // TODO: move this somewhere else
+{
   running = 0;
 }
 
@@ -59,7 +58,7 @@ int setup_gfx(const char* title, int width, int height)
     return -1;
   }
   // setting up window:
-  glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   the_window = glfwCreateWindow(width, height, title, NULL, NULL);
@@ -93,7 +92,7 @@ int keypress(int key)
   return 0;
 }
 
-int wait(int ms)
+int wait(double ms)
 {
   struct timespec req = { 0, ms * 1000 };
   return nanosleep(&req, NULL);

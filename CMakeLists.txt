@@ -28,7 +28,7 @@ add_subdirectory(${chipmunk_dir})
 
 # Files
 
-file(GLOB dame_sources "src/*.c")
+file(GLOB_RECURSE dame_sources "src/*.c")
 
 # Exe
 

@@ -2,8 +2,6 @@
 
 #include <math.h>
 
-#include "main.h"
-
 /* Drawing primitives */
 
 int draw_points(const Vec coords[], size_t count)
