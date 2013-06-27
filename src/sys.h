@@ -1,11 +1,20 @@
 #pragma once
 
-int setup_gfx(int width, int height);
-    // do necessary preparations and initializations
+int setup_gfx(const char* title, int width, int height);
+  // do necessary preparations and initializations
+
+int stop_gfx(void);
+  // deinitialize graphics
+
+int keypress(int key);
+  // returns nonzero if key is pressed
+
+int wait(int ms);
+  // wait for some miliseconds
 
 int render(void);
-    // render and swap buffers
+  // render and swap buffers
 
 double zoom(double factor);
-    // set zoom factor and return it, or just return it if 'factor' is zero
+  // set zoom factor and return it, or just return it if 'factor' is zero
 
