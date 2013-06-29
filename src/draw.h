@@ -23,18 +23,18 @@ typedef struct VDrawing { // Vertices drawing
   DrawingMode mode;
   size_t count; // vertices count
   Vec* vecs; // vertises array
-} ADrawing;
+} VDrawing;
 
 typedef struct PDrawing { // Parameterized drawing
   DrawingMode mode;
   Vec pos; // position for the center of drawing
   double params[2]; // params for drawing
-} RDrawing;
+} PDrawing;
 
 typedef union Drawing {
   DrawingMode mode;
-  ADrawing ver;
-  RDrawing par;
+  VDrawing ver;
+  PDrawing par;
 } Drawing;
 
 /* Drawing primitives */
