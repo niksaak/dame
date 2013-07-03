@@ -5,6 +5,8 @@
 
 #include "vector.h"
 
+struct Drawing;
+
 typedef enum DrawingMode {
   DRAW_END = 0, // null-terminator for drawing arrays
   // Arrays
@@ -31,10 +33,13 @@ typedef struct PDrawing { // Parameterized drawing
   double params[2]; // params for drawing
 } PDrawing;
 
-typedef union Drawing {
+typedef struct Drawing {
+  union {
   DrawingMode mode;
   VDrawing ver;
   PDrawing par;
+  }
+  int (*on_draw)(struct Drawing* drawing); // drawing callback
 } Drawing;
 
 /* Drawing primitives */
@@ -50,42 +55,5 @@ int draw_circle(Vec pos, double radius);
 int draw_square(Vec pos, double side);
 int draw_rectangle(Vec pos, double width, double height);
 
-inline int draw(const Drawing* drawing)
-{
-  if(drawing == NULL) {
-    return -1; // nurupo~
-  }
-  switch(drawing->mode) {
-    case DRAW_POINTS:
-      return draw_points(drawing->ver.vecs, drawing->ver.count);
-    case DRAW_POLYLINE:
-      return draw_polyline(drawing->ver.vecs, drawing->ver.count);
-    case DRAW_POLYGON:
-      return draw_polygon(drawing->ver.vecs, drawing->ver.count);
-    case DRAW_CURVE:
-      return draw_curve(drawing->ver.vecs, drawing->ver.count);
-    case DRAW_CIRCLE:
-      return draw_circle(drawing->par.pos, drawing->par.params[0]);
-    case DRAW_SQUARE:
-      return draw_square(drawing->par.pos, drawing->par.params[0]);
-    case DRAW_RECTANGLE:
-      return draw_rectangle(drawing->par.pos,
-                            drawing->par.params[0], drawing->par.params[1]);
-    default:
-      return -1; // bad enum
-  }
-  return -1;
-}
-
-inline int drawarr(const Drawing* array)
-{ // draw array of drawings
-  int ret = 0;
-
-  do {
-    ret |= draw(array);
-    array += sizeof (Drawing);
-  } while((array->mode != DRAW_END) & !ret);
-
-  return ret;
-}
-
+int draw(const Drawing* drawing);
+int drawarr(const Drawing* array)

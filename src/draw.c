@@ -153,7 +153,56 @@ int draw_rectangle(Vec pos, double width, double height)
   return draw_polygon(square, 4);
 }
 
-extern inline int draw(const Drawing* drawing);
+int draw(const Drawing* drawing)
+{
+  if(drawing == NULL) {
+    return -1; // nurupo~
+  }
+  switch(drawing->mode) {
+    case DRAW_POINTS:
+      draw_points(drawing->ver.vecs, drawing->ver.count);
+      break;
+    case DRAW_POLYLINE:
+      draw_polyline(drawing->ver.vecs, drawing->ver.count);
+      break;
+    case DRAW_POLYGON:
+      draw_polygon(drawing->ver.vecs, drawing->ver.count);
+      break;
+    case DRAW_CURVE:
+      draw_curve(drawing->ver.vecs, drawing->ver.count);
+      break;
+    case DRAW_CIRCLE:
+      draw_circle(drawing->par.pos, drawing->par.params[0]);
+      break;
+    case DRAW_SQUARE:
+      draw_square(drawing->par.pos, drawing->par.params[0]);
+      break;
+    case DRAW_RECTANGLE:
+      draw_rectangle(drawing->par.pos,
+                     drawing->par.params[0], drawing->par.params[1]);
+      break;
+    default:
+      return -1; // bad enum
+  }
 
-extern inline int draw(const Drawing* array);
+  if(drawing->on_draw != NULL) {
+    if(drawing->on_draw(drawing)) {
+      return -1; // error in callback
+    }
+  }
+
+  return 0;
+}
+
+int drawarr(const Drawing* array)
+{
+  int ret = 0;
+
+  do {
+    ret |= draw(array);
+    array += sizeof (Drawing);
+  } while((array->mode != DRAW_END) & !ret);
+
+  return ret;
+}
 
