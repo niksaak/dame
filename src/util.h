@@ -1,29 +1,29 @@
 #pragma once
 
 #include "stdlib.h"
+#include "math.h"
 
 #define TO_STR(symbol) #symbol
 
-/* Not sure if I really need those: */
-static inline long lmax(long a, long b)
-{
-  return (a > b) ? a : b;
-}
+#ifndef MAX
+#define MAX(a, b)                       \\
+  _Generic( (a),                        \\
+      float: fmaxf(a, b),               \\
+      double: fmax(a, b),               \\
+      long double: fmaxl(a, b),         \\
+      default: ((a) > (b)) ? (a) : (b))
+#endif
 
-static inline long lmin(long a, long b)
-{
-  return (a < b) ? a : b;
-}
+#ifndef MIN
+#define MIN(a, b)                       \\
+  _Generic( (a),                        \\
+      float: fminf(a, b),               \\
+      double: fmin(a, b),               \\
+      long double: fminl(a, b),         \\
+      default: ((a) < (b)) ? (a) : (b))
+#endif
 
-static inline unsigned long ulmax(unsigned long a, unsigned long b)
-{
-  return (a > b) ? a : b;
-}
-
-static inline unsigned long ulmin(unsigned long a, unsigned long b)
-{
-  return (a < b) ? a : b;
-}
+#define ARRCOUNT(arr, type) (sizeof arr * sizeof (type))
 
 static inline double floran(void)
 { // floating rand
