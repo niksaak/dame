@@ -1,6 +1,12 @@
 Distance And Modular Entities
 TODO file.
 
+2013-07-05 [ ] XXX: i have to conclude which is better for entity types to use
+                    — draw() functions or Drawing structs.
+                    First option seems to be more flexible for individual
+                    entities while the other one can more or less guarantee
+                    consistency of drawing methods.
+
 2013-06-07 [ ] TODO: create basic game entities, with support for drawing,
                 physicsing and docking
 
