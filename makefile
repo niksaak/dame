@@ -1,5 +1,3 @@
-CC := clang
-CXX := clang
 BUILD := Debug
 BUILD_DIR := build
 PROJECT_DIR := $(realpath $(shell pwd)/..)
@@ -18,15 +16,13 @@ make: configure
 
 configure:
 	@mkdir -p $(BUILD_DIR) && cd $(BUILD_DIR) && \
-	  CC=$(CC) CXX=$(CXX) \
+	  CC=clang \
 	  cmake -DCMAKE_BUILD_TYPE=$(BUILD) \
-	        -DCMAKE_PREFIX_PATH=$(PROJECT_DIR) \
-	        -DBUILD_DEMOS=OFF -DBUILD_SHARED=OFF -DINSTALL_STATIC=OFF \
 		..
 
 clean:
 	@make -C $(BUILD_DIR) clean
 
-cleanse: clean
+cleanse:
 	@rm -rf $(BUILD_DIR)/*
 
