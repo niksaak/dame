@@ -1,5 +1,9 @@
 #pragma once
 
+/* SYS
+ * system utilities
+ */
+
 #include <chipmunk/chipmunk.h>
 
 int running;
@@ -12,6 +16,7 @@ int start_gfx(const char* title, int width, int height);
 
 int stop_gfx(void);
   // deinitialize graphics
+
 
 /* Events */
 
@@ -33,7 +38,7 @@ double zoom(double factor);
 
 /* Physics */
 
-int init_space(void);
+cpSpace* init_space(void);
 
 cpSpace* current_space(void);
 

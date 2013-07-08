@@ -10,7 +10,7 @@ int running = 1;
 double the_zoom_factor = 1.0;
 double the_scr_aspect = 1.0;
 GLFWwindow* the_window; // the main window
-cpSpace* space; // the physics space
+cpSpace* the_space; // the physics space
 
 /* Graphics setup */
 
@@ -119,25 +119,20 @@ double zoom(double factor)
 
 /* Physics */
 
-int init_space(void)
+cpSpace* init_space(void)
 {
-  space = cpSpaceNew();
-
-  if(space == NULL) {
-    return -1;
-  }
-
-  return 0;
+  the_space = cpSpaceNew();
+  return the_space;
 }
 
 cpSpace* current_space(void)
 {
-  return space;
+  return the_space;
 }
 
 int deinit_space(void)
 {
-  cpSpaceFree(space);
+  cpSpaceFree(the_space);
   return 0;
 }
 
