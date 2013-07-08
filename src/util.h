@@ -23,7 +23,7 @@
       default: ((a) < (b)) ? (a) : (b))
 #endif
 
-#define ARRCOUNT(arr, type) (sizeof arr * sizeof (type))
+#define ARRLEN(arr, type) (sizeof arr * sizeof (type))
 
 static inline double floran(void)
 { // floating rand
