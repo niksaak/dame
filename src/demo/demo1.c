@@ -12,7 +12,7 @@ void demo1(void)
   double m_ball = 1;
   double r_ball = 0.05; // ball radius
   double i_ball = cpMomentForCircle(m_ball, 0, r_ball, cpvzero); // ball momentum
-  cpSpace* space = cpSpaceNew();
+  cpSpace* space = init_space();
   cpBody* ball =
     cpSpaceAddBody(space, cpBodyNew(m_ball, i_ball));
   cpShape* shape =
@@ -54,5 +54,7 @@ void demo1(void)
     cpSpaceStep(space, step);
     wait(step);
   }
+
+  deinit_space();
 }
 
