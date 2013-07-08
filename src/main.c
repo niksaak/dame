@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 {
   int glfwver[3] = {0};
 
-  if(setup_gfx("Distance And Modular Entities",512, 512)) {
+  if(start_gfx("Distance And Modular Entities",512, 512)) {
     return 1;
   }
   glfwGetVersion(&glfwver[0], &glfwver[1], &glfwver[2]);

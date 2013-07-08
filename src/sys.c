@@ -2,6 +2,7 @@
 
 #include <time.h>
 #include <GLFW/glfw3.h>
+#include <chipmunk/chipmunk.h>
 
 /* Internals */
 
@@ -9,6 +10,7 @@ int running = 1;
 double the_zoom_factor = 1.0;
 double the_scr_aspect = 1.0;
 GLFWwindow* the_window; // the main window
+cpSpace* space; // the physics space
 
 /* Graphics setup */
 
@@ -52,7 +54,7 @@ static int setup_gl(void)
 }
 
 
-int setup_gfx(const char* title, int width, int height)
+int start_gfx(const char* title, int width, int height)
 {
   if(!glfwInit()) {
     return -1;
@@ -113,5 +115,29 @@ double zoom(double factor)
     the_zoom_factor = factor;
   }
   return the_zoom_factor;
+}
+
+/* Physics */
+
+int init_space(void)
+{
+  space = cpSpaceNew();
+
+  if(space == NULL) {
+    return -1;
+  }
+
+  return 0;
+}
+
+cpSpace* current_space(void)
+{
+  return space;
+}
+
+int deinit_space(void)
+{
+  cpSpaceFree(space);
+  return 0;
 }
 
