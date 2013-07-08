@@ -19,7 +19,7 @@ int main(int argc, char** argv)
   printf("Using GL %s, GLSL %s\n",
          glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-  demo1();
+  demo2();
   stop_gfx();
 
   return 0;
