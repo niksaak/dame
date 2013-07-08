@@ -1,5 +1,9 @@
 #pragma once
 
+/* UTILS
+ * general convenience utilities
+ */
+
 #include "stdlib.h"
 #include "math.h"
 
@@ -23,7 +27,7 @@
       default: ((a) < (b)) ? (a) : (b))
 #endif
 
-#define ARRLEN(arr, type) (sizeof arr * sizeof (type))
+#define ARRLEN(arr, type) (sizeof arr / sizeof (type))
 
 static inline double floran(void)
 { // floating rand
