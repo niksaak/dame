@@ -24,7 +24,7 @@ endif()
 set(LOCAL_INCLUDE_DIR "include" CACHE INTERNAL "Local include dir")
 option(LINK_BLOCKS_RUNTIME
   "Link against BlockRuntime on targets with no builtin blocks support"
-  ON)
+  YES)
 
 # Chipmunk
 
