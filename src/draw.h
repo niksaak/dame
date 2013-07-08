@@ -1,7 +1,6 @@
 #pragma once
 
 /* DRAW
- *
  * this header provides functions for drawing thingies.
  * to use them, you need first initialize graphics with start_gfx() function
  * from sys.h header

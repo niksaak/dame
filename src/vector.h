@@ -1,5 +1,9 @@
 #pragma once
 
+/* VECTOR
+ * describes 2 dimensional vector type Vec and functions to work with it
+ */
+
 #include <stdbool.h>
 #include <chipmunk/chipmunk.h>
 
