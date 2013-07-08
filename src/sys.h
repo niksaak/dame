@@ -6,7 +6,7 @@
 
 #include <chipmunk/chipmunk.h>
 
-int running;
+int running; // FIXME: get rid of this variable
 
 
 /* Graphics setup */
@@ -32,9 +32,11 @@ int wait(double ms);
 int render(void);
   // render and swap buffers
 
-double zoom(double factor);
-  // set zoom if `factor` is not zero and return it
+double zoom(void);
+  // get zoom factor
 
+double setzoom(double factor);
+  // set zoom factor, get previous zoom factor
 
 /* Physics */
 

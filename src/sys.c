@@ -6,7 +6,7 @@
 
 /* Internals */
 
-int running = 1;
+int running = 1; // FIXME: get rid of this variable
 double the_zoom_factor = 1.0;
 double the_scr_aspect = 1.0;
 GLFWwindow* the_window; // the main window
@@ -14,8 +14,9 @@ cpSpace* the_space; // the physics space
 
 /* Graphics setup */
 
-void on_resize(GLFWwindow* win, int width, int height)
+void fix_aspect(GLFWwindow* win, int width, int height)
 {
+  double z = the_zoom_factor;
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -23,9 +24,9 @@ void on_resize(GLFWwindow* win, int width, int height)
 
   the_scr_aspect = ((GLfloat)width / (GLfloat)height) * the_zoom_factor;
   if(width >= height) {
-    glOrtho(-the_scr_aspect, the_scr_aspect, -1, 1, -1, 1);
+    glOrtho(-the_scr_aspect, the_scr_aspect, -z, z, -z, z);
   } else {
-    glOrtho(-1, 1, 1 / -the_scr_aspect, 1 / the_scr_aspect, -1, 1);
+    glOrtho(-z, z, 1 / -the_scr_aspect, 1 / the_scr_aspect, -z, z);
   }
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -71,7 +72,7 @@ int start_gfx(const char* title, int width, int height)
   glfwMakeContextCurrent(the_window);
   // setting callbacks:
   glfwSetWindowCloseCallback(the_window, on_close);
-  glfwSetWindowSizeCallback(the_window, on_resize);
+  glfwSetWindowSizeCallback(the_window, fix_aspect);
 
   setup_gl();
   //on_resize(the_window, width, height);
@@ -109,12 +110,16 @@ int render(void)
   return 0;
 }
 
-double zoom(double factor)
+double zoom()
 {
-  if(factor != 0) {
-    the_zoom_factor = factor;
-  }
   return the_zoom_factor;
+}
+
+double setzoom(double factor)
+{
+  double ret = the_zoom_factor;
+  the_zoom_factor = factor;
+  return ret;
 }
 
 /* Physics */
