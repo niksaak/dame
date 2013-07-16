@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../mother.h"
+#include "ports.h"
+
+PORT_KIND_DECL THRUSTER_PORT_KIND;
 
 double thruster_getpower(port_t* port);
   // get thruster power;

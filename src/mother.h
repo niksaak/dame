@@ -24,7 +24,7 @@ typedef struct port_kind_t {
 } port_kind_t;
 
 typedef struct port_t {
-  const port_kind_t* spec;
+  const port_kind_t* kind;
   struct module_t* module; // module which this port is attached to
   void* data; // port internal data
 

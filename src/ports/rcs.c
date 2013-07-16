@@ -32,16 +32,12 @@ static cpFloat moi(void)
 
 static int mk(port_t* port)
 {
-  if(port == NULL) {
-    return -1; // nurupo~
-  }
-
   cpSpace* space = current_space();
   cpBody* body = cpBodyNew(mass, moi());
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
 
   *port = (port_t){
-    .spec = &RCS_PORT_SPEC,
+    .kind = RCS_PORT_KIND,
     .module = NULL,
     .data = NULL,
     .body = body
@@ -57,8 +53,8 @@ static int mk(port_t* port)
 
 static int km(port_t* port)
 {
-  if(port->body == NULL) {
-    return -1; // nurupo~
+  if(port->kind != RCS_PORT_KIND) {
+    return -1;
   }
 
   cpSpace* space = current_space();
@@ -66,15 +62,14 @@ static int km(port_t* port)
     return -1; // space
   }
 
-  if(port->body) {
-    cpBodyEachShape_b(port->body, ^(cpShape* shape) {
-          cpSpaceRemoveShape(space, shape);
-          cpShapeFree(shape);
-        }
-    );
-    cpSpaceRemoveBody(space, port->body);
-    cpBodyFree(port->body);
-  }
+  cpBodyEachShape_b(port->body, ^(cpShape* shape) {
+        cpSpaceRemoveShape(space, shape);
+        cpShapeFree(shape);
+      }
+  );
+  cpSpaceRemoveBody(space, port->body);
+  cpBodyFree(port->body);
+
   *port = (port_t){0};
 
   return 0;
@@ -86,11 +81,13 @@ static int draw(port_t* port)
 }
 
 
-const port_kind_t RCS_PORT_KIND = {
+static const port_kind_t kind = {
   .id = RCS_PORT_ID,
   .name = "rcs",
   .mk = mk,
   .km = km,
   .draw = draw
 };
+
+const port_kind_t* const RCS_PORT_KIND = &kind;
 

@@ -11,8 +11,5 @@ typedef enum port_id_t {
   PORT_ID_MAX
 } port_id_t;
 
-const port_kind_t
-  DOCKING_PORT_SPEC,
-  RCS_PORT_SPEC,
-  THRUSTER_PORT_SPEC;
+typedef const port_kind_t* const PORT_KIND_DECL;
 
