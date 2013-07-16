@@ -27,7 +27,7 @@ static void print_sec(const char* string, ...)
 void demo2(void)
 {
   cpFloat step = 1000.0 / 60;
-  cpFloat pow = 0.005;
+  cpFloat pow = 0.001;
   cpSpace* space = init_space();
   module_t* module = mkmodule(cpvzero);
 

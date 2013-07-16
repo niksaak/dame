@@ -13,7 +13,10 @@ static const cpVect shapev[] = {
 };
 static const size_t shapec = ARRLEN(shapev, cpVect);
 
-static const cpFloat mass = 20;
+static const cpFloat mass = 2;
+
+int module_id;
+
 
 static cpFloat moi(void)
 {
@@ -39,7 +42,9 @@ module_t* mkmodule(cpVect pos)
   cpBody* body = cpBodyNew(mass, moi());
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
 
+  module_id++;
   *m = (module_t){
+    .id = module_id,
     // .fac = {0}, // TODO
     .ports = {0},
     .body = body
@@ -47,6 +52,8 @@ module_t* mkmodule(cpVect pos)
 
   cpBodySetUserData(body, m);
   cpShapeSetUserData(shape, m);
+  cpShapeSetGroup(shape, module_id);
+
   cpSpaceAddBody(space, body);
   cpSpaceAddShape(space, shape);
 

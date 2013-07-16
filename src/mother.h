@@ -32,6 +32,7 @@ typedef struct port_t {
 } port_t;
 
 typedef struct module_t {
+  int id; // serial number
   facility_t fac;
   port_t* ports[4]; // module ports, from eastern one counterclockwise
                     // (port[0] is at 0°, port[3] is at 270°)
