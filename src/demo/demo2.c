@@ -6,6 +6,7 @@
 
 #include "../draw.h"
 #include "../vector.h"
+#include "../util.h"
 #include "../sys.h"
 #include "../module.h"
 
@@ -33,32 +34,34 @@ void demo2(void)
 
   setzoom(8);
   while(!keypress(GLFW_KEY_Q) && running) {
+    cpBody* body = module->body;
+    GLenum error;
+
+    print_sec("velocity vector: %s\n", cpvstr(cpBodyGetVel(body)));
+
+    if(keypress(GLFW_KEY_UP)) {
+      cpBodyApplyImpulse(body, cpv(0, pow), cpvzero);
+    }
+    if(keypress(GLFW_KEY_DOWN)) {
+      cpBodyApplyImpulse(body, cpv(0, -pow), cpvzero);
+    }
+    if(keypress(GLFW_KEY_LEFT)) {
+      cpBodyApplyImpulse(body, cpv(-pow, 0), cpvzero);
+    }
+    if(keypress(GLFW_KEY_RIGHT)) {
+      cpBodyApplyImpulse(body, cpv(pow, 0), cpvzero);
+    }
+    if(keypress(GLFW_KEY_SPACE)) {
+      cpBodySetPos(body, cpvzero);
+      cpBodySetVel(body, cpvzero);
+    }
+
     glClear(GL_COLOR_BUFFER_BIT);
     draw_module(module);
     render();
-
-    { cpBody* body = module->body;
-
-      print_sec("velocity vector: %s\n", cpvstr(cpBodyGetVel(body)));
-
-      if(keypress(GLFW_KEY_UP)) {
-        cpBodyApplyImpulse(body, cpv(0, pow), cpvzero);
-      }
-      if(keypress(GLFW_KEY_DOWN)) {
-        cpBodyApplyImpulse(body, cpv(0, -pow), cpvzero);
-      }
-      if(keypress(GLFW_KEY_LEFT)) {
-        cpBodyApplyImpulse(body, cpv(-pow, 0), cpvzero);
-      }
-      if(keypress(GLFW_KEY_RIGHT)) {
-        cpBodyApplyImpulse(body, cpv(pow, 0), cpvzero);
-      }
-      if(keypress(GLFW_KEY_SPACE)) {
-        cpBodySetPos(body, cpvzero);
-        cpBodySetVel(body, cpvzero);
-      }
+    if((error = glGetError())) {
+      gl_strerror(error);
     }
-
     cpSpaceStep(space, step);
     wait(step);
   }
