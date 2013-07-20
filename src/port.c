@@ -1,5 +1,6 @@
 #include "port.h"
 
+#include <GLFW/glfw3.h>
 #include "ports/rcs.h"
 #include "ports/thruster.h"
 
@@ -39,6 +40,30 @@ int kmport(port_t* port)
 
   int ret = port->kind->km(port);
   free(port);
+
+  return ret;
+}
+
+int draw_port(port_t* port)
+{
+  if(port == NULL) {
+    return -1; // nyurupo~
+  }
+  if(port->body == NULL) {
+    return -1; // no body
+  }
+  if(port->kind->draw == NULL) {
+    return -1; // not implemented
+  }
+
+  cpVect pos = cpBodyGetPos(port->body);
+  int ret = 0;
+
+  glPushMatrix();
+  glLoadIdentity();
+  glTranslated(pos.x, pos.y, 0);
+  ret = port->kind->draw(port);
+  glPopMatrix();
 
   return ret;
 }

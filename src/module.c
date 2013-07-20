@@ -4,6 +4,7 @@
 #include "sys.h"
 #include "util.h"
 #include "draw.h"
+#include "port.h"
 
 static const cpVect shapev[] = {
   { -1, 1 },
@@ -78,15 +79,21 @@ int draw_module(const module_t* module)
   if(module == NULL) {
     return -1; // nutupo~
   }
-  int ret;
 
-  Vec pos = cpv2vec(cpBodyGetPos(module->body));
+  int ret = 0;
+
+  cpVect pos = cpBodyGetPos(module->body);
   glPushMatrix();
+  glLoadIdentity(); // TODO: moving camera
   glTranslated(pos.x, pos.y, 0);
-  ret = draw_polygon((Vec*)shapev, shapec);
+  ret |= draw_polygon((Vec*)shapev, shapec);
+  for(port_t* const * p = module->ports; p < (module->ports + 4); p++) {
+    if(*p != NULL) {
+      draw_port(*p);
+    }
+  }
   glPopMatrix();
   return ret;
-  // TODO: draw module ports, if any, too
 }
 
 int module_mkport(module_t* module, int place, int kind)

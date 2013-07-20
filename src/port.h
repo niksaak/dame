@@ -8,3 +8,5 @@ port_t* mkport(const port_kind_t* kind, cpVect pos);
 
 int kmport(port_t* port);
 
+int draw_port(port_t* port);
+
