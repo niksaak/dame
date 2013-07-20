@@ -4,8 +4,9 @@
  * general convenience utilities
  */
 
-#include "stdlib.h"
-#include "math.h"
+#include <stdlib.h>
+#include <math.h>
+#include <GLFW/glfw3.h>
 
 #define TO_STR(symbol) #symbol
 
@@ -49,4 +50,6 @@ inline int ran_domo(int min, int max)
   }
   return ran_domo(min, max);
 }
+
+const char* gl_strerror(GLenum error);
 
