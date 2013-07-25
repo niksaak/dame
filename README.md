@@ -14,8 +14,9 @@ and build executable in directory *build/bin/*. You can also pass following
 parameters to make:
 + **BUILD** - build type. Supported either `Debug` (the default) or `Release`.
 
-Because of extensive usage of compiler extensions, for now DAME builds only
-under **Clang**.
+Because of extensive usage of compiler extensions, for now DAME only builds
+with *Clang*. It also needs linking against BlocksRuntime library on all
+configurations with no native blocks support.
 
 Current version: **0.0.921** <br />
 Working on: mothership modules internal structure.
