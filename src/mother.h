@@ -12,7 +12,8 @@
 struct port_t;
 struct module_t;
 
-typedef struct {
+typedef struct facility_t {
+  int kind;
 } facility_t; // TODO
 
 typedef struct port_kind_t {

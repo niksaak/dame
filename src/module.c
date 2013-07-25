@@ -46,7 +46,7 @@ module_t* mkmodule(cpVect pos)
   module_id++;
   *m = (module_t){
     .id = module_id,
-    // .fac = {0}, // TODO
+    .fac = {0}, // YAAY DONE LOL
     .ports = {0},
     .body = body
   };
