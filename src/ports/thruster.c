@@ -72,6 +72,8 @@ int km(port_t* port)
   cpSpace* space = current_space();
 
   free(port->data);
+  remove_body(port->body, space);
+  /*
   cpBodyEachShape_b(port->body,
                     ^(cpShape* shape) {
         cpSpaceRemoveShape(space, shape);
@@ -80,6 +82,7 @@ int km(port_t* port)
   );
   cpSpaceRemoveBody(space, port->body);
   cpBodyFree(port->body);
+  */
 
   return 0;
 }

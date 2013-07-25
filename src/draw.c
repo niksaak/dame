@@ -9,10 +9,10 @@ int draw_points(const Vec coords[], size_t count)
   if(coords == NULL) {
     return -1; // nurupo~
   }
-  glEnableClientState(GL_VERTEX_ARRAY);
+  //glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_POINTS, 0, count);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  //glDisableClientState(GL_VERTEX_ARRAY);
   return 0;
 }
 
@@ -21,10 +21,10 @@ int draw_polyline(const Vec coords[], size_t count)
   if(coords == NULL) {
     return -1; // nurupo~
   }
-  glEnableClientState(GL_VERTEX_ARRAY);
+  //glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_LINE_STRIP, 0, count);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  //glDisableClientState(GL_VERTEX_ARRAY);
   return 0;
 }
 
@@ -33,10 +33,10 @@ int draw_polygon(const Vec coords[], size_t count)
   if(coords == NULL) {
     return -1; // nurupo~
   }
-  glEnableClientState(GL_VERTEX_ARRAY);
+  //glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_DOUBLE, 0, coords);
   glDrawArrays(GL_LINE_LOOP, 0, count);
-  glDisableClientState(GL_VERTEX_ARRAY);
+  //glDisableClientState(GL_VERTEX_ARRAY);
   return 0;
 }
 

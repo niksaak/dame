@@ -12,6 +12,7 @@ double the_scr_aspect = 1.0;
 GLFWwindow* the_window; // the main window
 cpSpace* the_space; // the physics space
 
+
 /* Graphics setup */
 
 void fix_aspect(GLFWwindow* win, int width, int height)
@@ -42,6 +43,8 @@ static int setup_gl(void)
   glShadeModel(GL_SMOOTH);
   glClearColor(0, 0, 0, 0);
   glClearDepth(1);
+
+  glEnableClientState(GL_VERTEX_ARRAY);
 
   glEnable(GL_ALPHA_TEST);
   glEnable(GL_DEPTH_TEST);
@@ -85,6 +88,7 @@ int stop_gfx(void) {
   return 0;
 }
 
+
 /* Events */
 
 int keypress(int key)
@@ -100,6 +104,7 @@ int wait(double ms)
   struct timespec req = { 0, ms * 1000 };
   return nanosleep(&req, NULL);
 }
+
 
 /* Rendering */
 
@@ -122,6 +127,7 @@ double setzoom(double factor)
   return ret;
 }
 
+
 /* Physics */
 
 cpSpace* init_space(void)
@@ -138,6 +144,30 @@ cpSpace* current_space(void)
 int deinit_space(void)
 {
   cpSpaceFree(the_space);
+  return 0;
+}
+
+int remove_body(cpBody* body, cpSpace* space)
+{
+  if(body == NULL) {
+    return -1; // nyurupo~
+  }
+  if(space == NULL) {
+    if(the_space != NULL) {
+      space = the_space;
+    } else {
+      return -1;
+    }
+  }
+
+  cpBodyEachShape_b(body,
+      ^(cpShape* s){
+        cpSpaceRemoveShape(space, s);
+        cpShapeFree(s);
+      });
+  cpSpaceRemoveBody(space, body);
+  cpBodyFree(body);
+
   return 0;
 }
 
