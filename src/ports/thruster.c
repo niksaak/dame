@@ -3,6 +3,7 @@
 #include <chipmunk/chipmunk.h>
 #include "../sys.h"
 #include "../util.h"
+#include "../draw.h"
 
 cpVect shapev[] = {
   { 0, 0.5 },
@@ -126,13 +127,28 @@ int thruster_setpower(port_t* port, double power)
   return 0;
 }
 
+static int draw(port_t* port)
+{
+  cpVect pos = cpBodyGetPos(port->body);
+  int ret;
+
+  glPushMatrix();
+  {
+    glLoadIdentity();
+    glTranslated(pos.x, pos.y, 0);
+    ret = draw_polygon((Vec*)shapev, shapec);
+  }
+  glPopMatrix();
+
+  return ret;
+}
 
 static const port_kind_t kind = {
   .id = THRUSTER_PORT_ID,
   .name = "thruster",
   .mk = mk,
   .km = km,
-  .draw = NULL
+  .draw = draw
 };
 
 const port_kind_t* const THRUSTER_PORT_KIND;

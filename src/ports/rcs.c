@@ -79,8 +79,19 @@ static int km(port_t* port)
 }
 
 static int draw(port_t* port)
-{
-  return draw_polygon((Vec*)shapev, shapec);
+{ // TODO
+  cpVect pos = cpBodyGetPos(port->body);
+  int ret;
+
+  glPushMatrix();
+  {
+    glLoadIdentity();
+    glTranslated(pos.x, pos.y, 0);
+    ret = draw_polygon((Vec*)shapev, shapec);
+  }
+  glPopMatrix();
+
+  return ret;
 }
 
 
