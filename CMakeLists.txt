@@ -21,7 +21,7 @@ if(NOT CMAKE_BUILD_TYPE)
       "Build type")
 endif()
 
-set(LOCAL_INCLUDE_DIR "include" CACHE INTERNAL "Local include dir")
+set(UTIL_INCLUDE_DIR "util" CACHE INTERNAL "Utilities include dir")
 option(LINK_BLOCKS_RUNTIME
   "Link against BlockRuntime on targets with no builtin blocks support"
   YES)
@@ -42,7 +42,7 @@ add_subdirectory(${CHIPMUNK_DIR})
 # Files
 
 file(GLOB_RECURSE dame_SOURCES "src/*.c")
-include_directories(${LOCAL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
+include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
                     ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
 # Exe
