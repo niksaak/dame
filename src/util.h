@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <GLFW/glfw3.h>
+#include <uthash.h>
 
 #define TO_STR(symbol) #symbol
 
