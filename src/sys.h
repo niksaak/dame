@@ -35,8 +35,8 @@ int render(void);
 double zoom(void);
   // get zoom factor
 
-double setzoom(double factor);
-  // set zoom factor, get previous zoom factor
+double setzoom(double f);
+  // get zoom factor then set it to f
 
 
 /* Physics */
@@ -47,6 +47,6 @@ cpSpace* current_space(void);
 
 int deinit_space(void);
 
-int remove_body(cpBody* body, cpSpace* space);
+int remove_body(cpBody* body);
   // remove body and all its shapes from space and then free them
 

@@ -120,10 +120,10 @@ double zoom()
   return the_zoom_factor;
 }
 
-double setzoom(double factor)
+double setzoom(double f)
 {
   double ret = the_zoom_factor;
-  the_zoom_factor = factor;
+  the_zoom_factor = f;
   return ret;
 }
 
@@ -147,17 +147,17 @@ int deinit_space(void)
   return 0;
 }
 
-int remove_body(cpBody* body, cpSpace* space)
+int remove_body(cpBody* body)
 {
   if(body == NULL) {
     return -1; // nyurupo~
   }
-  if(space == NULL) {
-    if(the_space != NULL) {
-      space = the_space;
-    } else {
-      return -1;
-    }
+
+  cpSpace* space;
+  if(the_space != NULL) {
+    space = the_space;
+  } else {
+    return -1;
   }
 
   cpBodyEachShape_b(body,

@@ -70,10 +70,8 @@ int km(port_t* port)
     return -1;
   }
 
-  cpSpace* space = current_space();
-
   free(port->data);
-  remove_body(port->body, space);
+  remove_body(port->body);
   /*
   cpBodyEachShape_b(port->body,
                     ^(cpShape* shape) {
