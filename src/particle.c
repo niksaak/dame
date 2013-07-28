@@ -2,11 +2,13 @@
 
 #include <math.h>
 #include "sys.h"
+#include "vector.h"
+#include "draw.h"
 
 // moment of inertia for circle: (pi/4)*r^4
 cpFloat particle_r = 0.01;
 cpFloat particle_moi = 7.85398 * 10e-14 ?: 0.000000001;
-int id;
+int id = 0;
 particle_t* particles;
 
 int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy)
@@ -60,6 +62,29 @@ particle_t* particle(int id)
 
 int draw_particles(void)
 {
-  return -1; // TODO
+  static Vec pointv[512];
+  static size_t pointc = ARRLEN(pointv, Vec);
+  double z = zoom();
+  particle_t* p = particles;
+  int i = 0;
+  size_t count = HASH_COUNT(particles);
+
+  while(i < count) {
+    for(; p != NULL && i < pointc; p = p->hh.next, i++) {
+      cpVect pos = cpBodyGetPos(p->body);
+
+      if(fabs(pos.x) <= z / 2 && fabs(pos.y) <= z / 2) {
+        // rough check if position is inside screen borders
+        // TODO: possibly make it separate function
+        // TODO: possibly use HASH_SELECT
+        pointv[i] = cpv2vec(pos);
+      }
+    }
+    if(draw_points(pointv, i % pointc)) {
+      return -1;
+    }
+  }
+
+  return 0;
 }
 
