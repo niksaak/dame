@@ -10,19 +10,14 @@
 #include "../sys.h"
 #include "../module.h"
 
-static void print_sec(const char* string, ...)
+static int issec(void)
 {
-  va_list ap;
   static int sec = 0;
 
-  if(++sec >= 100) {
-    sec = 0;
-    va_start(ap, string);
-    {
-      vprintf(string, ap);
-    }
-    va_end(ap);
+  if(!(++sec % 60)) {
+    return 1;
   }
+  return 0;
 }
 
 void demo2(void)
@@ -35,9 +30,14 @@ void demo2(void)
   setzoom(8);
   while(!keypress(GLFW_KEY_Q) && running) {
     cpBody* body = module->body;
+    cpVect vel = cpBodyGetVel(body);
+    cpVect pos = cpBodyGetPos(body);
     GLenum error;
 
-    print_sec("velocity vector: %s\n", cpvstr(cpBodyGetVel(body)));
+    if(issec()) {
+      printf("vel: %s; ", cpvstr(vel));
+      printf("pos: %s\n", cpvstr(pos));
+    }
 
     if(keypress(GLFW_KEY_UP)) {
       cpBodyApplyImpulse(body, cpv(0, pow), cpvzero);
