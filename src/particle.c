@@ -37,13 +37,22 @@ int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy)
   return id++;
 }
 
-int kmparticle(int id)
+int kmparticle_id(int id)
 {
   particle_t* p = particle(id);
   if(p == NULL) {
     return -1;
   }
 
+  HASH_DEL(particles, p);
+  remove_body(p->body);
+  free(p);
+
+  return 0;
+}
+
+int kmparticle_ptr(particle_t* p)
+{
   HASH_DEL(particles, p);
   remove_body(p->body);
   free(p);

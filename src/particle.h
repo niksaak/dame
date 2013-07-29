@@ -25,7 +25,14 @@ typedef struct particle_t {
 
 int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy);
 
-int kmparticle(int id);
+#define kmparticle(p)              \
+  _Generic((p),                    \
+      particle_t*: kmparticle_ptr, \
+      int: kmparticle_id)(p)
+
+int kmparticle_id(int id);
+
+int kmparticle_ptr(particle_t* ptr);
 
 particle_t* particle(int id);
 
