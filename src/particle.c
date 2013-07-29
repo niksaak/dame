@@ -76,7 +76,6 @@ int draw_particles(void)
       if(fabs(pos.x) <= z / 2 && fabs(pos.y) <= z / 2) {
         // rough check if position is inside screen borders
         // TODO: possibly make it separate function
-        // TODO: possibly use HASH_SELECT
         pointv[i] = cpv2vec(pos);
       }
     }
@@ -86,5 +85,25 @@ int draw_particles(void)
   }
 
   return 0;
+}
+
+void age_particles(void)
+{
+  particle_t* p = particles;
+  particle_t* tmp;
+  HASH_ITER(hh, particles, p, tmp) {
+    if(p->life <= 0) {
+      double enew = p->energy / (2 * floran());
+
+      if(p->kind > COLD_PARTICLE) {
+        p->kind--;
+        p->energy = enew;
+        p->life = (p->kind == COLD_PARTICLE) ? 0 : enew;
+      } else {
+        kmparticle(p);
+      }
+    }
+    p->life--;
+  }
 }
 

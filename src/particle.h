@@ -31,3 +31,5 @@ particle_t* particle(int id);
 
 int draw_particles(void);
 
+void age_particles(void);
+
