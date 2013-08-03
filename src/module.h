@@ -16,7 +16,7 @@ int kmmodule(module_t* module);
 int draw_module(const module_t* module);
     // draw the module
 
-int module_mkport(module_t* module, int place, int kind);
+int module_mkport(module_t* module, int place, const port_kind_t* kind);
     // make port of `kind` and attach it to `module` at `place`
 
 int module_kmport(module_t* module, int place);
