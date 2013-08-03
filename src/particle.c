@@ -6,10 +6,11 @@
 #include "draw.h"
 
 // moment of inertia for circle: (pi/4)*r^4
-cpFloat particle_r = 0.01;
-cpFloat particle_moi = 7.85398 * 10e-14 ?: 0.000000001;
-int id = 0;
-particle_t* particles;
+static const cpFloat particle_r = 0.01;
+static const cpFloat particle_moi = 7.85398 * 10e-14;
+
+static int id = 0;
+static particle_t* particles;
 
 int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy)
 {

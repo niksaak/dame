@@ -5,7 +5,7 @@
 #include "../util.h"
 #include "../draw.h"
 
-cpVect shapev[] = {
+static cpVect shapev[] = {
   { 0, 0.5 },
   { 0.25, 1 },
   { 0.5, 1 },
@@ -13,10 +13,8 @@ cpVect shapev[] = {
   { 0.25, -1 },
   { 0, -0.5 }
 };
-
-size_t shapec = ARRLEN(shapev, cpVect);
-
-cpFloat mass = 0.3;
+static const size_t shapec = ARRLEN(shapev, cpVect);
+static const cpFloat mass = 0.3;
 
 
 static cpFloat moi(void)

@@ -7,9 +7,9 @@
 /* Internals */
 
 int running = 1; // FIXME: get rid of this variable
-double the_zoom_factor = 1.0;
-GLFWwindow* the_window; // the main window
-cpSpace* the_space; // the physics space
+static double the_zoom_factor = 1.0;
+static GLFWwindow* the_window; // the main window
+static cpSpace* the_space; // the physics space
 
 
 /* Graphics setup */
