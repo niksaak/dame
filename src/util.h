@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include <GLFW/glfw3.h>
 #include <uthash.h>
 
@@ -30,6 +31,13 @@
 #endif
 
 #define ARRLEN(arr, type) (sizeof arr / sizeof (type))
+
+// PRECISION
+static const double
+PI = 3.1415926535897932384626433832795028841971693993751058209749,
+QUADCIRCLE = 1.57079632679489661923132169163975144209858469968755,
+SEMICIRCLE = PI,
+TRIQUADCIRCLE = 4.7123889803846898576939650749192543262957540990;
 
 static inline double floran(void)
 { // floating rand
