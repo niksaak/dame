@@ -95,13 +95,55 @@ int draw_module(const module_t* module)
   return ret;
 }
 
-int module_mkport(module_t* module, int place, int kind)
+static int rotate_port(port_t* p, module_t* m, int place)
 {
-  return -1; // TODO
+  cpVect ppos = cpBodyWorld2Local(m->body, cpBodyGetPos(p->body));
+
+  switch(place) {
+    case 0:
+      break;
+    case 1:
+      cpBodySetAngle(p->body, QUADCIRCLE);
+      ppos = cpvperp(ppos);
+      break;
+    case 2:
+      cpBodySetAngle(p->body, SEMICIRCLE);
+      ppos = cpvneg(ppos);
+      break;
+    case 3:
+      cpBodySetAngle(p->body, -QUADCIRCLE);
+      ppos = cpvrperp(ppos);
+      break;
+    default: return -1; // bad place
+  }
+
+  cpBodySetPos(p->body, cpBodyLocal2World(m->body, ppos));
+
+  return 0;
+}
+
+int module_mkport(module_t* module, int place, const port_kind_t* kind)
+{ // TODO
+  port_t* p = mkport(kind, cpvadd(cpBodyGetPos(module->body), (cpVect){1,0}));
+
+  if(rotate_port(p, module, place)) {
+    return -1; // rotation unsuccessful
+  }
+  module->ports[place] = p;
+
+  return 0;
 }
 
 int module_kmport(module_t* module, int place)
 {
-  return -1; // TODO
+  port_t* p = module->ports[place];
+  if(p == NULL) {
+    return -1; // TODO: warn here
+  }
+
+  module->ports[place] = NULL;
+  kmport(p);
+
+  return 0;
 }
 
