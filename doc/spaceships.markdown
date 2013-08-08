@@ -23,5 +23,6 @@ common and basic kinds of port are:
 + **Nozzle**: Allows engine modules to provide thrust.
 + **Shunting system**: Set of smaller nozzles providing attitude control.
 + **Armor plating**. Improves module hardiness.
+
 *(TODO)*
 

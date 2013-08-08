@@ -13,20 +13,20 @@
 #define TO_STR(symbol) #symbol
 
 #ifndef MAX
-#define MAX(a, b)                       \\
-  _Generic( (a),                        \\
-      float: fmaxf(a, b),               \\
-      double: fmax(a, b),               \\
-      long double: fmaxl(a, b),         \\
+#define MAX(a, b)                       \
+  _Generic( (a),                        \
+      float: fmaxf(a, b),               \
+      double: fmax(a, b),               \
+      long double: fmaxl(a, b),         \
       default: ((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef MIN
-#define MIN(a, b)                       \\
-  _Generic( (a),                        \\
-      float: fminf(a, b),               \\
-      double: fmin(a, b),               \\
-      long double: fminl(a, b),         \\
+#define MIN(a, b)                       \
+  _Generic( (a),                        \
+      float: fminf(a, b),               \
+      double: fmin(a, b),               \
+      long double: fminl(a, b),         \
       default: ((a) < (b)) ? (a) : (b))
 #endif
 
