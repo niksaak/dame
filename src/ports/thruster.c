@@ -119,18 +119,7 @@ int thruster_setpower(port_t* port, double power)
 
 static int draw(port_t* port)
 {
-  cpVect pos = cpBodyGetPos(port->body);
-  int ret;
-
-  glPushMatrix();
-  {
-    glLoadIdentity();
-    glTranslated(pos.x, pos.y, 0);
-    ret = draw_polygon((Vec*)shapev, shapec);
-  }
-  glPopMatrix();
-
-  return ret;
+  return draw_polygon((Vec*)shapev, shapec);
 }
 
 static const port_kind_t kind = {

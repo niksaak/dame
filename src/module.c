@@ -78,18 +78,25 @@ int draw_module(const module_t* module)
   }
 
   int ret = 0;
-
   cpVect pos = cpBodyGetPos(module->body);
+  cpFloat ang = cpBodyGetAngle(module->body);
+
   glPushMatrix();
-  glLoadIdentity(); // TODO: moving camera
-  glTranslated(pos.x, pos.y, 0);
-  ret |= draw_polygon((Vec*)shapev, shapec);
-  for(port_t* const * p = module->ports; p < (module->ports + 4); p++) {
-    if(*p != NULL) {
-      draw_port(*p);
+  {
+    glLoadIdentity(); // TODO: moving camera
+    glTranslated(pos.x, pos.y, 0);
+    glRotated(ang, 0, 0, 0);
+    ret |= draw_polygon((Vec*)shapev, shapec);
+
+    for(int i = 0; i < 4; i++) {
+      port_t* p = module->ports[i];
+      if(p != NULL) {
+        draw_port(p);
+      }
     }
   }
   glPopMatrix();
+
   return ret;
 }
 

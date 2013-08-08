@@ -57,12 +57,16 @@ int draw_port(port_t* port)
   }
 
   cpVect pos = cpBodyGetPos(port->body);
+  cpFloat ang = cpBodyGetAngle(port->body);
   int ret = 0;
 
   glPushMatrix();
-  glLoadIdentity();
-  glTranslated(pos.x, pos.y, 0);
-  ret = port->kind->draw(port);
+  {
+    glLoadIdentity();
+    glTranslated(pos.x, pos.y, 0);
+    glRotated(ang, 0, 0, 0);
+    ret = port->kind->draw(port);
+  }
   glPopMatrix();
 
   return ret;
