@@ -4,20 +4,20 @@
 #include "../sys.h"
 #include "../util.h"
 #include "../draw.h"
-#include "ports.h"
+#include "ports_util.h"
 
 static const cpVect shapev[] = {
   { 0    ,  0.5  },
   { 0.25 ,  1    },
   { 0.75 ,  1    },
-  { 0    ,  0.25 },
-  { 0    , -0.25 },
+  { 1    ,  0.25 },
+  { 1    , -0.25 },
   { 0.75 , -1    },
   { 0.25 , -1    },
-  { 1    , -0.5  }
+  { 0    , -0.5  }
 };
-static const size_t shapec = ARRLEN(shapev, cpVect);
 
+static const size_t shapec = ARRLEN(shapev, cpVect);
 static const cpFloat mass = 0.5;
 
 
