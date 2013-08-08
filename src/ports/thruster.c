@@ -17,19 +17,11 @@ static const size_t shapec = ARRLEN(shapev, cpVect);
 static const cpFloat mass = 0.3;
 
 
-static cpFloat moi(void)
-{
-  static cpFloat i = 0;
-  if(i == 0) {
-    i = cpMomentForPoly(mass, shapec, shapev, cpvzero);
-  }
-  return i;
-}
-
 int mk(port_t* port)
 {
   cpSpace* space = current_space();
-  cpBody* body = cpBodyNew(mass, moi());
+  cpBody* body = cpBodyNew(mass,
+                     cpMomentForPoly(mass, shapec, shapev, cpvzero));
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
   double* thrust = calloc(1, sizeof *thrust);
 
@@ -70,16 +62,6 @@ int km(port_t* port)
 
   free(port->data);
   remove_body(port->body);
-  /*
-  cpBodyEachShape_b(port->body,
-                    ^(cpShape* shape) {
-        cpSpaceRemoveShape(space, shape);
-        cpShapeFree(shape);
-      }
-  );
-  cpSpaceRemoveBody(space, port->body);
-  cpBodyFree(port->body);
-  */
 
   return 0;
 }

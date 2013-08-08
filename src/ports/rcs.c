@@ -21,19 +21,11 @@ static const size_t shapec = ARRLEN(shapev, cpVect);
 static const cpFloat mass = 0.5;
 
 
-static cpFloat moi(void)
-{ // moment of inertia
-  static cpFloat m = 0;
-  if(m == 0) {
-    m = cpMomentForPoly(mass, shapec, shapev, cpvzero);
-  }
-  return m;
-}
-
 static int mk(port_t* port)
 {
   cpSpace* space = current_space();
-  cpBody* body = cpBodyNew(mass, moi());
+  cpBody* body = cpBodyNew(mass,
+                     cpMomentForPoly(mass, shapec, shapev, cpvzero));
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
 
   *port = (port_t){
@@ -85,7 +77,6 @@ static int draw(port_t* port)
 
 
 static const port_kind_t kind = {
-  .id = RCS_PORT_ID,
   .name = "rcs",
   .mk = mk,
   .km = km,

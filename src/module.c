@@ -74,7 +74,7 @@ int kmmodule(module_t* module)
 int draw_module(const module_t* module)
 {
   if(module == NULL) {
-    return -1; // nutupo~
+    return -1; // nurupo~
   }
 
   int ret = 0;
@@ -130,12 +130,15 @@ static int rotate_port(port_t* p, module_t* m, int place)
 int module_mkport(module_t* module, int place, const port_kind_t* kind)
 { // TODO
   port_t* p = mkport(kind, cpvadd(cpBodyGetPos(module->body), (cpVect){1,0}));
+  if(p == NULL) {
+    return -1; // mkport() unsuccessful
+  }
 
   if(rotate_port(p, module, place)) {
     return -1; // rotation unsuccessful
   }
+  p->module = module;
   module->ports[place] = p;
-
   return 0;
 }
 

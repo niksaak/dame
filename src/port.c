@@ -38,6 +38,10 @@ int kmport(port_t* port)
     return -1; // not implemented
   }
 
+  cpSpace* space = current_space();
+
+  cpBodyEachConstraint_b(port->body,
+      ^(cpConstraint* c) { cpSpaceRemoveConstraint(space, c); });
   int ret = port->kind->km(port);
   free(port);
 
