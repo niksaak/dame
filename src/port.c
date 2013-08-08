@@ -1,6 +1,8 @@
 #include "port.h"
 
 #include <GLFW/glfw3.h>
+#include "sys.h"
+#include "util.h"
 #include "ports/rcs.h"
 #include "ports/thruster.h"
 
@@ -9,18 +11,16 @@ port_t* mkport(const port_kind_t* kind, cpVect pos)
   if(kind == NULL) {
     return NULL; // nyurupo~
   }
-  if(kind->id >= PORT_ID_MAX || kind->id < 0) {
-    return NULL; // bad kind
-  }
   if(kind->mk == NULL) {
     return NULL; // not implemented
   }
 
   port_t* p = malloc(sizeof *p);
-
+  p->id = genid();
   if(kind->mk(p)) {
     return NULL; // TODO error handling
   }
+
   cpBodySetPos(p->body, pos);
 
   return p;

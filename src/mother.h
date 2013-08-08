@@ -17,7 +17,6 @@ typedef struct facility_t {
 } facility_t; // TODO
 
 typedef struct port_kind_t {
-  int id; // kind identifier
   const char* name; // kind namestring
   int (*mk)(struct port_t* port); // port initializer
   int (*km)(struct port_t* port); // port deinitializer
@@ -25,6 +24,7 @@ typedef struct port_kind_t {
 } port_kind_t;
 
 typedef struct port_t {
+  int id;
   const port_kind_t* kind;
   struct module_t* module; // module which this port is attached to
   void* data; // port internal data

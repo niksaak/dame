@@ -92,9 +92,6 @@ double thruster_getpower(port_t* port)
   if(port->kind == NULL) {
     return -1; // nyurupo
   }
-  if(port->kind->id != THRUSTER_PORT_ID) {
-    return -1; // bad enum
-  }
   if(port->data == NULL) {
     return -1; // nyurupo~
   }
@@ -109,9 +106,6 @@ int thruster_setpower(port_t* port, double power)
   }
   if(port->kind == NULL) {
     return -1; // nyurupo~
-  }
-  if(port->kind->id != THRUSTER_PORT_ID) {
-    return -1; // bad enum
   }
   if(port->data == NULL) {
     return -1; // nyurupo~
@@ -140,7 +134,6 @@ static int draw(port_t* port)
 }
 
 static const port_kind_t kind = {
-  .id = THRUSTER_PORT_ID,
   .name = "thruster",
   .mk = mk,
   .km = km,

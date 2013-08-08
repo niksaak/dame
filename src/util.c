@@ -1,5 +1,11 @@
 #include "util.h"
 
+int genid(void)
+{
+  static int id;
+  return id++;
+}
+
 extern inline int ran_domo(int min, int max);
 
 const char* gl_strerror(GLenum error) {

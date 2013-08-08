@@ -15,8 +15,6 @@ static const cpVect shapev[] = {
 static const size_t shapec = ARRLEN(shapev, cpVect);
 static const cpFloat mass = 2;
 
-static int id = 0;
-
 
 static cpFloat moi(void)
 {
@@ -41,11 +39,11 @@ module_t* mkmodule(cpVect pos)
 
   cpBody* body = cpBodyNew(mass, moi());
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
+  int id = genid();
 
-  id++;
   *m = (module_t){
     .id = id,
-    .fac = {0}, // YAAY DONE LOL
+    .fac = {0},
     .ports = {0},
     .body = body
   };
