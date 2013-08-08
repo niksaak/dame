@@ -9,6 +9,7 @@
 #include "../util.h"
 #include "../sys.h"
 #include "../module.h"
+#include "../port.h"
 
 static int issec(void)
 {
@@ -26,6 +27,8 @@ void demo2(void)
   cpFloat pow = 0.001;
   cpSpace* space = init_space();
   module_t* module = mkmodule(cpvzero);
+
+  module_mkport(module, 3, RCS_PORT_KIND);
 
   setzoom(8);
   while(!keypress(GLFW_KEY_Q) && running) {
