@@ -47,10 +47,9 @@ include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
 
 # Exe
 
-set(EXE "bin/${CMAKE_PROJECT_NAME}" CACHE INTERNAL
+set(EXE "${CMAKE_PROJECT_NAME}" CACHE INTERNAL
   "Path for executable to be built")
 
-make_directory("bin")
 add_executable(${EXE} ${dame_SOURCES})
 
 target_link_libraries(${EXE}

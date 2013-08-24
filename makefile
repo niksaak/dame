@@ -9,7 +9,7 @@ MAKEFLAGS += --no-print-directory
 all: make
 
 run:
-	$(BUILD_DIR)/bin/dame
+	$(BUILD_DIR)/dame
 
 make: configure
 	@$(MAKE) -C $(BUILD_DIR)
