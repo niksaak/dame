@@ -9,15 +9,15 @@ corovans robbing are the options too.
 
 ## Building
 
-For Linux and MinGW you can just run `make` in this folder. It will configure
-and build executable in directory *build/bin/*. You can also pass following
-parameters to make:
+For Linux and MinGW you can just run `make` in this folder. It will invoke
+CMake to configure and build executable in the *build* directory. You can also
+pass following parameter to make:
 + **BUILD** - build type. Supported either `Debug` (the default) or `Release`.
 
 Because of extensive usage of compiler extensions, for now DAME only builds
 with *Clang*. It also needs linking against BlocksRuntime library on all
 configurations with no native blocks support.
 
-Current version: **0.0.921** <br />
-Working on: mothership modules internal structure.
+Current version: **0.0.922** <br />
+Working on: making things work.
 
