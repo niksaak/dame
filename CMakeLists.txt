@@ -3,6 +3,7 @@ cmake_policy(SET CMP0001 NEW)
 cmake_policy(SET CMP0008 NEW)
 cmake_policy(SET CMP0015 NEW)
 
+### ### ###
 # Project
 
 project(dame C)
@@ -39,26 +40,40 @@ set(CHIPMUNK_INCLUDE_DIR "${CHIPMUNK_DIR}/include" CACHE INTERNAL
 
 add_subdirectory(${CHIPMUNK_DIR})
 
-# Files
+### ### ###
+# Global includes and links
 
-file(GLOB_RECURSE dame_SOURCES "src/*.c")
 include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
                     ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 
+set(dame_LINKAGES "chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES}"
+  CACHE INTERNAL "Libraries for linking")
+
 # Exe
 
-set(EXE "${CMAKE_PROJECT_NAME}" CACHE INTERNAL
-  "Path for executable to be built")
-
-add_executable(${EXE} ${dame_SOURCES})
-
-target_link_libraries(${EXE}
+file(GLOB_RECURSE dame_SOURCES "src/*.c")
+add_executable(dame ${dame_SOURCES})
+target_link_libraries(dame
   chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
+
 if(LINK_BLOCKS_RUNTIME)
   find_library(BLOCKS_RUNTIME "BlocksRuntime")
-  target_link_libraries(${EXE} ${BLOCKS_RUNTIME})
+  target_link_libraries(dame ${BLOCKS_RUNTIME})
 endif()
 
+# Tests
+
+file(GLOB_RECURSE dame_TEST_SOURCES "test/*.c")
+add_executable(check ${dame_TEST_SOURCES})
+target_link_libraries(check
+  chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
+
+if(LINK_BLOCKS_RUNTIME)
+  find_library(BLOCKS_RUNTIME "BlocksRuntime")
+  target_link_libraries(check ${BLOCKS_RUNTIME})
+endif()
+
+### ### ###
 # Compiler
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=gnu11 -fblocks")
