@@ -66,6 +66,31 @@ typedef struct Tester {
     }                                                             \
   } while(0)
 
+#define TASSERTM(a, fmt, ...)                                     \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
+              _tester->test, _tester->name, _tester->assertion);  \
+      fputs("    ", stderr);                                      \
+      fprintf(stderr, fmt, __VA_ARGS__);                          \
+      puts("");                                                   \
+    }                                                             \
+  } while(0)
+
+#define TEASSERTM(a, fmt, ...)                                    \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      fprintf(stderr, "%s@%s: assertion (%s) failed:\n",          \
+              _tester->test, _tester->name, _tester->assertion);  \
+      fputs("    ", stderr);                                      \
+      fprintf(stderr, fmt, __VA_ARGS__);                          \
+      puts("");                                                   \
+      goto ret;                                                   \
+    }                                                             \
+  } while(0)
+
 #define TEST(name, tester)    \
   name(_Generic((tester),     \
            Tester: &(tester), \
