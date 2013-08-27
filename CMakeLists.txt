@@ -49,10 +49,17 @@ include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
 set(dame_LINKAGES "chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES}"
   CACHE INTERNAL "Libraries for linking")
 
+# Base
+
+get_filename_component(dame_MAIN_SOURCE "src/main.c" REALPATH)
+
+file(GLOB_RECURSE dame_BASE_SOURCES "src/*.c")
+list(REMOVE_ITEM dame_BASE_SOURCES ${dame_MAIN_SOURCE})
+add_library(dame_base OBJECT ${dame_BASE_SOURCES})
+
 # Exe
 
-file(GLOB_RECURSE dame_SOURCES "src/*.c")
-add_executable(dame ${dame_SOURCES})
+add_executable(dame ${dame_MAIN_SOURCE} $<TARGET_OBJECTS:dame_base>)
 target_link_libraries(dame
   chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
 
@@ -64,7 +71,7 @@ endif()
 # Tests
 
 file(GLOB_RECURSE dame_TEST_SOURCES "test/*.c")
-add_executable(check ${dame_TEST_SOURCES})
+add_executable(check ${dame_TEST_SOURCES} $<TARGET_OBJECTS:dame_base>)
 target_link_libraries(check
   chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
 
