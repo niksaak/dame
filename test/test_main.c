@@ -6,11 +6,9 @@ Tester check_module(void);
 
 int main(int argc, char* argv[])
 {
-  Tester test_test = check_test();
   Tester draw_test = check_draw();
   Tester module_test = check_module();
 
-  print_test_summary(test_test);
   print_test_summary(draw_test);
   print_test_summary(module_test);
 
