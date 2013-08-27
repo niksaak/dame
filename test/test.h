@@ -46,24 +46,24 @@ typedef struct Tester {
     }                   \
   }
 
-#define TASSERT(a)                                    \
-  do {                                                \
-    _tester->assertion = #a;                          \
-    if(!(a)) {                                        \
-      _tester->fail = true;                           \
-      fprintf(stderr, "%s: assertion (%s) failed\n",  \
-              _tester->name, _tester->assertion);     \
-    }                                                 \
+#define TASSERT(a)                                                \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      _tester->fail = true;                                       \
+      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
+              _tester->test, _tester->name, _tester->assertion);  \
+    }                                                             \
   } while(0)
 
-#define TEASSERT(a)                                   \
-  do {                                                \
-    _tester->assertion = #a;                          \
-    if(!(a)) {                                        \
-      fprintf(stderr, "%s: assertion (%s) failed\n",  \
-              _tester->name, _tester->assertion);     \
-      goto ret;                                       \
-    }                                                 \
+#define TEASSERT(a)                                               \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
+              _tester->test, _tester->name, _tester->assertion);  \
+      goto ret;                                                   \
+    }                                                             \
   } while(0)
 
 #define TEST(name, tester)    \
