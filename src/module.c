@@ -182,3 +182,8 @@ int module_kmport(module_t* module, int place)
   return 0;
 }
 
+int punch_module(module_t* module, cpVect direction)
+{
+  return -1;
+}
+
