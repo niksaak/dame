@@ -9,7 +9,8 @@ START_DEFTEST(mkmodule_pos)
   module_t* m = mkmodule((cpVect){ 9, -15 });
   TEASSERT(m != NULL);
   TEASSERT(m->body != NULL);
-  TASSERT(cpveql(cpBodyGetPos(m->body), (cpVect){ 9, -15 }));
+  TASSERTM(cpveql(cpBodyGetPos(m->body), (cpVect){ 9, -15 }),
+           "pos == %s", cpvstr(cpBodyGetPos(m->body)));
 
   deinit_space();
 }

@@ -30,11 +30,14 @@ END_DEFTEST
 
 START_DEFTEST(kmparticle_ptr_null_returns_nonzero)
 {
+  FAIL("FIXME: Segfault"); // FIXME
+  /*
   init_space();
 
   TASSERT(kmparticle((particle_t*)NULL) != 0); // TODO: remove cast
 
   deinit_space();
+  */
 }
 END_DEFTEST
 
