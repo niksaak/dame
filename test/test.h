@@ -12,6 +12,7 @@
  * END_DEFTEST - end test definition
  * TASSERT(assertion) - fallthrough assert
  * TEASSERT(assertion) - no fallthrough assert
+ * FAIL(msg) - fail immediately with custom message
  * TEST(name, tester) - run test named name with tester
  * print_test_summary(runner) - print summary for tests ran with runner
  */
@@ -60,11 +61,50 @@ typedef struct Tester {
   do {                                                            \
     _tester->assertion = #a;                                      \
     if(!(a)) {                                                    \
+      _tester->fail = true;                                       \
       fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
               _tester->test, _tester->name, _tester->assertion);  \
       goto ret;                                                   \
     }                                                             \
   } while(0)
+
+#define TASSERTM(a, fmt, ...)                                     \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      _tester->fail = true;                                       \
+      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
+              _tester->test, _tester->name, _tester->assertion);  \
+      fputs("    ", stderr);                                      \
+      fprintf(stderr, fmt, __VA_ARGS__);                          \
+      fputc('\n', stderr);                                        \
+    }                                                             \
+  } while(0)
+
+#define TEASSERTM(a, fmt, ...)                                    \
+  do {                                                            \
+    _tester->assertion = #a;                                      \
+    if(!(a)) {                                                    \
+      tester->fail = true;                                        \
+      fprintf(stderr, "%s@%s: assertion (%s) failed:\n",          \
+              _tester->test, _tester->name, _tester->assertion);  \
+      fputs("    ", stderr);                                      \
+      fprintf(stderr, fmt, __VA_ARGS__);                          \
+      fputc('\n', stderr);                                        \
+      goto ret;                                                   \
+    }                                                             \
+  } while(0)
+
+#define FAIL(fmt, ...)                      \
+  do {                                      \
+    _tester->assertion = NULL;              \
+    _tester->fail = true;                   \
+    fprintf(stderr, "%s@%s: failed - ",     \
+            _tester->test, _tester->name);  \
+    fprintf(stderr, fmt, ##__VA_ARGS__);    \
+    fputc('\n', stderr);                    \
+    goto ret;                               \
+  } while(0);
 
 #define TEST(name, tester)    \
   name(_Generic((tester),     \
@@ -74,7 +114,7 @@ typedef struct Tester {
 
 static inline void print_test_summary(const Tester r)
 {
-  printf("\n%s:\n%3i total,\n%3i passed,\n%3i failed.\n",
+  printf("%s: %i total, %i passed, %i failed.\n",
          r.name, r.testc, r.passc, r.failc);
 }
 
