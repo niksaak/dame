@@ -1,16 +1,24 @@
 #include "test.h"
 
-Tester check_test(void);
 Tester check_draw(void);
 Tester check_module(void);
+Tester check_particle(void);
+Tester check_sys(void);
 
 int main(int argc, char* argv[])
 {
-  Tester draw_test = check_draw();
-  Tester module_test = check_module();
+  Tester tests[] = {
+    check_draw(),
+    check_module(),
+    check_particle(),
+    check_sys()
+  };
+  size_t tests_len = sizeof(tests) / sizeof(Tester);
 
-  print_test_summary(draw_test);
-  print_test_summary(module_test);
+  fputc('\n', stderr);
+  for(int i = 0; i < tests_len; i++) {
+    print_test_summary(tests[i]);
+  }
 
   return 0;
 }
