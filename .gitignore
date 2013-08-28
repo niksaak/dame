@@ -2,6 +2,7 @@
 *~
 !.gitignore
 tags
+TAGS
 
 #bin-dirs
 build/*
