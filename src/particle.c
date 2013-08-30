@@ -54,6 +54,10 @@ int kmparticle_id(int id)
 
 int kmparticle_ptr(particle_t* p)
 {
+  if(p == NULL) {
+    return -1;
+  }
+
   HASH_DEL(particles, p);
   remove_body(p->body);
   free(p);

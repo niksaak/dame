@@ -28,7 +28,8 @@ int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy);
 #define kmparticle(p)              \
   _Generic((p),                    \
       particle_t*: kmparticle_ptr, \
-      int: kmparticle_id)(p)
+      int: kmparticle_id,          \
+      void*: kmparticle_ptr)(p)
 
 int kmparticle_id(int id);
 
