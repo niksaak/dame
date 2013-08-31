@@ -21,7 +21,6 @@ typedef struct Tester {
   const char* name;         // name for runner
 
   const char* test;         // name of the current test
-  const char* assertion;    // name of the current assertion
   bool fail;                // true if the test has failed
 
   int testc;                // test count
@@ -35,7 +34,6 @@ typedef struct Tester {
     _tester->test = __func__;              \
     _tester->testc++;                      \
     TEASSERT(_tester != NULL);             \
-    _tester->assertion = NULL;             \
     _tester->fail = false;
 
 #define END_DEFTEST     \
@@ -49,33 +47,29 @@ typedef struct Tester {
 
 #define TASSERT(a)                                                \
   do {                                                            \
-    _tester->assertion = #a;                                      \
     if(!(a)) {                                                    \
       _tester->fail = true;                                       \
-      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
-              _tester->test, _tester->name, _tester->assertion);  \
+      fprintf(stderr, "%s @ %s\n %s failed.\n",                   \
+              _tester->test, _tester->name, #a);                  \
     }                                                             \
   } while(0)
 
 #define TEASSERT(a)                                               \
   do {                                                            \
-    _tester->assertion = #a;                                      \
     if(!(a)) {                                                    \
       _tester->fail = true;                                       \
-      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
-              _tester->test, _tester->name, _tester->assertion);  \
+      fprintf(stderr, "%s @ %s\n %s failed.\n",                   \
+              _tester->test, _tester->name, #a);                  \
       goto ret;                                                   \
     }                                                             \
   } while(0)
 
 #define TASSERTM(a, fmt, ...)                                     \
   do {                                                            \
-    _tester->assertion = #a;                                      \
     if(!(a)) {                                                    \
       _tester->fail = true;                                       \
-      fprintf(stderr, "%s@%s: assertion (%s) failed\n",           \
-              _tester->test, _tester->name, _tester->assertion);  \
-      fputs("    ", stderr);                                      \
+      fprintf(stderr, "%s @ %s\n %s failed: ",                    \
+              _tester->test, _tester->name, #a);                  \
       fprintf(stderr, fmt, __VA_ARGS__);                          \
       fputc('\n', stderr);                                        \
     }                                                             \
@@ -83,12 +77,10 @@ typedef struct Tester {
 
 #define TEASSERTM(a, fmt, ...)                                    \
   do {                                                            \
-    _tester->assertion = #a;                                      \
     if(!(a)) {                                                    \
       tester->fail = true;                                        \
-      fprintf(stderr, "%s@%s: assertion (%s) failed:\n",          \
-              _tester->test, _tester->name, _tester->assertion);  \
-      fputs("    ", stderr);                                      \
+      fprintf(stderr, "%s @ %s\n %s failed: ",                    \
+              _tester->test, _tester->name, #a);                  \
       fprintf(stderr, fmt, __VA_ARGS__);                          \
       fputc('\n', stderr);                                        \
       goto ret;                                                   \
@@ -97,9 +89,8 @@ typedef struct Tester {
 
 #define FAIL(fmt, ...)                      \
   do {                                      \
-    _tester->assertion = NULL;              \
     _tester->fail = true;                   \
-    fprintf(stderr, "%s@%s: failed - ",     \
+    fprintf(stderr, "%s @ %s failed: ",     \
             _tester->test, _tester->name);  \
     fprintf(stderr, fmt, ##__VA_ARGS__);    \
     fputc('\n', stderr);                    \
