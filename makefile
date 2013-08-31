@@ -19,7 +19,7 @@ configure:
 	  CC=clang cmake -DCMAKE_BUILD_TYPE=$(BUILD) ..
 
 test:
-	@$(BUILD_DIR)/check
+	@$(BUILD_DIR)/checkall
 
 check: test
 
