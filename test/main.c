@@ -4,6 +4,7 @@ Tester check_draw(void);
 Tester check_module(void);
 Tester check_particle(void);
 Tester check_sys(void);
+Tester check_entity(void);
 
 int main(int argc, char* argv[])
 {
@@ -11,7 +12,8 @@ int main(int argc, char* argv[])
     check_draw(),
     check_module(),
     check_particle(),
-    check_sys()
+    check_sys(),
+    check_entity()
   };
   size_t tests_len = sizeof(tests) / sizeof(Tester);
 
