@@ -7,6 +7,7 @@
 #include "mother.h"
 
 typedef int entity_t;
+// entity id
 
 typedef enum entity_kind_t {
   MOTHER_ENTITY, // - mothership or just a chunk of joined modules;
@@ -16,12 +17,15 @@ typedef enum entity_kind_t {
   PORT_ENTITY // - port, floating in space.
 } entity_kind_t;
 
+static const int BAD_ENTITY = -1;
+// magic constant for signalling errors
+
 /* Make Entity */
 
-#define mkentity(obj)                           \
-  _Generic((obj),                               \
-      module_t*: _mkentity(obj, MODULE_ENTITY), \
-      port_t*: _mkentity(obj, PORT_ENTITY))
+#define mkentity(obj)                               \
+  _Generic((obj),                                   \
+      module_t*: mkentity_kind(obj, MODULE_ENTITY), \
+      port_t*: mkentity_kind(obj, PORT_ENTITY))
 // create entity, deducing its' kind from pointer type
 
 entity_t mkentity_kind(void* obj, entity_kind_t kind);
