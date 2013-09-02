@@ -1,20 +1,20 @@
-#include "test.h"
+#include <check.h>
 #include "../src/sys.h"
 
-START_DEFTEST(start_gfx_zero_dimensions_returns_nonzero)
+START_TEST(start_gfx_zero_dimensions_returns_nonzero)
 {
-  TASSERT(start_gfx("start_gfx_zero_dimensions_returns_nonzero", 0, 0) != 0);
+  ck_assert_int_ne(start_gfx("test", 0, 0), 0);
   stop_gfx();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(start_gfx_title_null_sets_default_title)
+START_TEST(start_gfx_title_null_sets_default_title)
 {
-  FAIL("TODO"); // TODO
+  ck_abort_msg("TODO"); // TODO
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(setzoom_returns_previous_zoom)
+START_TEST(setzoom_returns_previous_zoom)
 {
   double z0;
   double z1 = 0.5;
@@ -24,59 +24,63 @@ START_DEFTEST(setzoom_returns_previous_zoom)
   z0 = setzoom(z1);
   z3 = setzoom(z2);
 
-  TASSERTM(z3 == z1, "z3 == %g", z3);
+  ck_assert_msg(z3 == z1, "z3 == %g", z3);
 
   setzoom(z0);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(init_space_returns_current_space)
+START_TEST(init_space_returns_current_space)
 {
   cpSpace* s = init_space();
 
-  TASSERT(s != NULL);
-  TASSERT(current_space != NULL);
-  TASSERT(s == current_space());
+  ck_assert_ptr_ne(s, NULL);
+  ck_assert_ptr_ne(current_space, NULL);
+  ck_assert_ptr_eq(s, current_space());
 
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(remove_body_works)
+START_TEST(remove_body_works)
 {
   cpSpace* s = init_space();
   cpBody* b = cpSpaceAddBody(s, cpBodyNew(1, 1));
   cpShape* sh = cpSpaceAddShape(s, cpCircleShapeNew(b, 1, cpvzero));
   remove_body(b);
 
-  TEASSERT(s != NULL);
-  TEASSERT(b != NULL);
-  TEASSERT(sh != NULL);
+  ck_assert_ptr_ne(s, NULL);
+  ck_assert_ptr_ne(b, NULL);
+  ck_assert_ptr_ne(sh, NULL);
 
-  TASSERT(!cpSpaceContainsBody(s, b));
-  TASSERT(!cpSpaceContainsShape(s, sh));
+  ck_assert(!cpSpaceContainsBody(s, b));
+  ck_assert(!cpSpaceContainsShape(s, sh));
 
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(remove_body_null_returns_nonzero)
+START_TEST(remove_body_null_returns_nonzero)
 {
-  TASSERT(remove_body(NULL) != 0);
+  ck_assert_int_ne(remove_body(NULL), 0);
 }
-END_DEFTEST
+END_TEST
 
-Tester check_sys(void)
+Suite* mk_sys_suite(void)
 {
-  Tester t = {"sys"};
+  Suite* s = suite_create("sys");
+  TCase* tgfx = tcase_create("gfx");
+  TCase* tspace = tcase_create("space");
 
-  TEST(start_gfx_zero_dimensions_returns_nonzero, t);
-  TEST(start_gfx_title_null_sets_default_title, t);
-  TEST(setzoom_returns_previous_zoom, t);
-  TEST(init_space_returns_current_space, t);
-  TEST(remove_body_works, t);
-  TEST(remove_body_null_returns_nonzero, t);
+  tcase_add_test(tgfx, start_gfx_zero_dimensions_returns_nonzero);
+  tcase_add_test(tgfx, start_gfx_title_null_sets_default_title);
+  tcase_add_test(tgfx, setzoom_returns_previous_zoom);
+  tcase_add_test(tspace, init_space_returns_current_space);
+  tcase_add_test(tspace, remove_body_works);
+  tcase_add_test(tspace, remove_body_null_returns_nonzero);
+  suite_add_tcase(s, tgfx);
+  suite_add_tcase(s, tspace);
 
-  return t;
+  return s;
 }
 

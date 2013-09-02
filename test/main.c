@@ -1,27 +1,23 @@
-#include "test.h"
+#include <stdlib.h>
+#include <check.h>
 
-Tester check_draw(void);
-Tester check_module(void);
-Tester check_particle(void);
-Tester check_sys(void);
-Tester check_entity(void);
+Suite* mk_draw_suite(void);
+Suite* mk_module_suite(void);
+Suite* mk_particle_suite(void);
+Suite* mk_sys_suite(void);
 
-int main(int argc, char* argv[])
+int main(void)
 {
-  Tester tests[] = {
-    check_draw(),
-    check_module(),
-    check_particle(),
-    check_sys(),
-    check_entity()
-  };
-  size_t tests_len = sizeof(tests) / sizeof(Tester);
+  int nf;
+  SRunner* r = srunner_create(mk_sys_suite());
+  srunner_add_suite(r, mk_draw_suite());
+  srunner_add_suite(r, mk_particle_suite());
+  srunner_add_suite(r, mk_module_suite());
 
-  fputc('\n', stderr);
-  for(int i = 0; i < tests_len; i++) {
-    print_test_summary(tests[i]);
-  }
+  srunner_run_all(r, CK_ENV);
+  nf = srunner_ntests_failed(r);
+  srunner_free(r);
 
-  return 0;
+  return (nf == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 

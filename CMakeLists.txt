@@ -13,8 +13,12 @@ if(NOT CMAKE_C_COMPILER_ID STREQUAL "Clang")
     "Clang is required to build the project, not ${CMAKE_C_COMPILER_ID}")
 endif()
 
+set(CMAKE_MODULE_PATH
+  ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/tools/CMakeModules/")
+
 find_package(OpenGL REQUIRED)
 find_package(glfw REQUIRED)
+find_package(Check REQUIRED)
 
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "Build type defaults to Debug...")
@@ -44,7 +48,7 @@ add_subdirectory(${CHIPMUNK_DIR})
 # Global includes and links
 
 include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
-                    ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+  ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${CHECK_INCLUDE_DIRS})
 
 set(dame_LINKAGES "chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES}"
   CACHE INTERNAL "Libraries for linking")
@@ -71,13 +75,13 @@ endif()
 # Tests
 
 file(GLOB_RECURSE dame_TEST_SOURCES "test/*.c")
-add_executable(check ${dame_TEST_SOURCES} $<TARGET_OBJECTS:dame_base>)
-target_link_libraries(check
-  chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
+add_executable(checkall ${dame_TEST_SOURCES} $<TARGET_OBJECTS:dame_base>)
+target_link_libraries(checkall
+  chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${CHECK_LIBRARIES})
 
 if(LINK_BLOCKS_RUNTIME)
   find_library(BLOCKS_RUNTIME "BlocksRuntime")
-  target_link_libraries(check ${BLOCKS_RUNTIME})
+  target_link_libraries(checkall ${BLOCKS_RUNTIME})
 endif()
 
 ### ### ###
