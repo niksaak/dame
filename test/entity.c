@@ -3,115 +3,117 @@
 #include "../src/module.h"
 #include "../src/sys.h"
 
-START_DEFTEST(mkentity_null_returns_bad_entity)
+START_TEST(mkentity_null_returns_bad_entity)
 {
-  TASSERT(mkentity((module_t*)NULL) == BAD_ENTITY);
+  ck_assert_int_eq(mkentity((module_t*)NULL), BAD_ENTITY);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(mkentity_works)
+START_TEST(mkentity_works)
 {
   init_space();
   module_t* m = mkmodule(cpvzero);
   entity_t ent = mkentity(m);
 
-  TEASSERT(m != NULL);
-  TEASSERT(ent != BAD_ENTITY);
-  TEASSERT(entity(ent) == m);
+  ck_assert_ptr_ne(m, NULL);
+  ck_assert_int_ne(ent, BAD_ENTITY);
+  ck_assert_ptr_eq(entity(ent), m);
 
   kmmodule(m);
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(kmentity_bad_entity_returns_nonzero)
+START_TEST(kmentity_bad_entity_returns_nonzero)
 {
-  TASSERT(kmentity(BAD_ENTITY) != 0);
+  ck_assert_int_ne(kmentity(BAD_ENTITY), 0);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(kmentity_works)
+START_TEST(kmentity_works)
 {
   init_space();
   module_t* m = mkmodule(cpvzero);
   entity_t ent = mkentity(m);
 
-  TEASSERT(m != NULL);
-  TEASSERT(ent != BAD_ENTITY);
+  ck_assert_ptr_ne(m, NULL);
+  ck_assert_int_ne(ent, BAD_ENTITY);
 
-  TASSERT(kmentity(ent) == 0);
-  TASSERT(entity(ent) == NULL);
+  ck_assert_int_eq(kmentity(ent), 0);
+  ck_assert_ptr_eq(entity(ent), NULL);
 
   kmmodule(m);
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(entity_kind_works)
+START_TEST(entity_kind_works)
 {
   init_space();
   module_t* m = mkmodule(cpvzero);
   entity_t ent = mkentity(m);
 
-  TEASSERT(m != NULL);
-  TEASSERT(ent != BAD_ENTITY);
+  ck_assert_ptr_ne(m, NULL);
+  ck_assert_int_ne(ent, BAD_ENTITY);
 
-  TASSERT(entity_kind(ent) == MODULE_ENTITY);
+  ck_assert_int_eq(entity_kind(ent) == MODULE_ENTITY);
 
   kmentity(ent);
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(entity_kind_bad_entity_returns_bad_entity)
+START_TEST(entity_kind_bad_entity_returns_bad_entity)
 {
-  TASSERT(entity_kind(BAD_ENTITY) == BAD_ENTITY);
+  ck_assert_int_eq(entity_kind(BAD_ENTITY), BAD_ENTITY);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(entity_bad_entity_returs_null)
+START_TEST(entity_bad_entity_returs_null)
 {
-  TASSERT(entity(BAD_ENTITY) == NULL);
+  ck_assert_ptr_eq(entity(BAD_ENTITY), NULL);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(entity_nonexistant_return_null)
+START_TEST(entity_nonexistant_returns_null)
 {
-  TASSERT(entity(413) == NULL);
+  ck_assert_ptr_eq(entity(413), NULL);
 }
-END_DEFTEST
+END_TEST
 
-START_DEFTEST(sentity_works)
+START_TEST(sentity_works)
 {
   init_space();
   module_t* m = mkmodule(cpvzero);
   entity_t ent = mkentity(m);
 
-  TEASSERT(m != NULL);
-  TEASSERT(ent != BAD_ENTITY);
+  ck_assert_ptr_ne(m, NULL);
+  ck_assert_int_ne(ent, BAD_ENTITY);
 
-  TASSERT(sentity(ent, MODULE_ENTITY) == m);
-  TASSERT(sentity(ent, PORT_ENTITY) == NULL);
+  ck_assert_ptr_eq(sentity(ent, MODULE_ENTITY), m);
+  ck_assert_ptr_eq(sentity(ent, PORT_ENTITY), NULL);
 
   kmentity(ent);
   deinit_space();
 }
-END_DEFTEST
+END_TEST
 
-Tester check_entity(void)
+Suite* mk_entity_suite(void)
 {
-  Tester t = {"entity"};
+  Suite* s = suite_create("entity");
+  TCase* c = tcase_create("core");
 
-  TEST(mkentity_null_returns_bad_entity, t);
-  TEST(mkentity_works, t);
-  TEST(kmentity_bad_entity_returns_nonzero, t);
-  TEST(kmentity_works, t);
-  TEST(entity_kind_works, t);
-  TEST(entity_kind_bad_entity_returns_bad_entity, t);
-  TEST(entity_bad_entity_returs_null, t);
-  TEST(entity_nonexistant_return_null, t);
-  TEST(sentity_works, t);
+  tcase_add_test(c, mkentity_null_returns_bad_entity);
+  tcase_add_test(c, mkentity_works);
+  tcase_add_test(c, kmentity_bad_entity_returns_nonzero);
+  tcase_add_test(c, kmentity_works);
+  tcase_add_test(c, entity_kind_works);
+  tcase_add_test(c, entity_kind_bad_entity_returns_bad_entity);
+  tcase_add_test(c, entity_bad_entity_returs_null);
+  tcase_add_test(c, entity_nonexistant_returns_null);
+  tcase_add_test(c, sentity_works);
+  suite_add_tcase(s, c);
 
-  return t;
+  return s;
 }
 
