@@ -1,4 +1,4 @@
-#include "test.h"
+#include <check.h>
 #include "../src/entity.h"
 #include "../src/module.h"
 #include "../src/sys.h"
@@ -56,7 +56,7 @@ START_TEST(entity_kind_works)
   ck_assert_ptr_ne(m, NULL);
   ck_assert_int_ne(ent, BAD_ENTITY);
 
-  ck_assert_int_eq(entity_kind(ent) == MODULE_ENTITY);
+  ck_assert_int_eq(entity_kind(ent), MODULE_ENTITY);
 
   kmentity(ent);
   deinit_space();
