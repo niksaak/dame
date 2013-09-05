@@ -4,8 +4,6 @@
  * manage game entities.
  */
 
-#include "mother.h"
-
 typedef int entity_t;
 // entity id
 
