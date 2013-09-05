@@ -37,10 +37,10 @@ static void entrem(Ent* ent)
   free(ent);
 }
 
-entity_t entgenid(void)
+static entity_t entgenid(void)
 {
   static entity_t id;
-  return id++;
+  return ++id;
 }
 
 /* API */
@@ -53,7 +53,8 @@ entity_t mkentity_kind(void* obj, entity_kind_t kind)
 
   entity_t id = entgenid();
   entput((Ent){ id, kind, obj });
-  // TODO: what after I create 4294967296 entities?
+  // TODO: what after I create 4294967294 entities?
+  // TODO: consider just checking the id by HASH_FIND()ing it
 
   return id;
 }
@@ -83,6 +84,10 @@ int entity_kind(entity_t id)
 
 void* entity(entity_t id)
 {
+  if(id == NIL_ENTITY || id == BAD_ENTITY) {
+    return NULL;
+  }
+
   Ent* ent = getent(id);
 
   if(ent == NULL) {
@@ -94,6 +99,10 @@ void* entity(entity_t id)
 
 void* sentity(entity_t id, entity_kind_t kind)
 {
+  if(id == NIL_ENTITY || id == BAD_ENTITY) {
+    return NULL;
+  }
+
   Ent* ent = getent(id);
 
   if(ent == NULL) {

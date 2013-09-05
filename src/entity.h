@@ -19,6 +19,8 @@ typedef enum entity_kind_t {
 
 static const int BAD_ENTITY = -1;
 // magic constant for signalling errors
+static const int NIL_ENTITY = 0;
+// magic constant for absent entities
 
 /* Make Entity */
 

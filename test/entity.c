@@ -30,6 +30,12 @@ START_TEST(kmentity_bad_entity_returns_nonzero)
 }
 END_TEST
 
+START_TEST(kmentity_nil_returns_nonzero)
+{
+  ck_assert_int_ne(kmentity(NIL_ENTITY), 0);
+}
+END_TEST
+
 START_TEST(kmentity_works)
 {
   init_space();
@@ -69,6 +75,12 @@ START_TEST(entity_kind_bad_entity_returns_bad_entity)
 }
 END_TEST
 
+START_TEST(entity_kind_nil_returns_bad_entity)
+{
+  ck_assert_int_eq(entity_kind(NIL_ENTITY), BAD_ENTITY);
+}
+END_TEST
+
 START_TEST(entity_bad_entity_returs_null)
 {
   ck_assert_ptr_eq(entity(BAD_ENTITY), NULL);
@@ -98,6 +110,18 @@ START_TEST(sentity_works)
 }
 END_TEST
 
+START_TEST(sentity_bad_entity_returns_null)
+{
+  ck_assert_ptr_eq(sentity(BAD_ENTITY, MODULE_ENTITY), NULL);
+}
+END_TEST
+
+START_TEST(sentity_nil_returns_null)
+{
+  ck_assert_ptr_eq(sentity(NIL_ENTITY, MODULE_ENTITY), NULL);
+}
+END_TEST
+
 Suite* mk_entity_suite(void)
 {
   Suite* s = suite_create("entity");
@@ -106,12 +130,16 @@ Suite* mk_entity_suite(void)
   tcase_add_test(c, mkentity_null_returns_bad_entity);
   tcase_add_test(c, mkentity_works);
   tcase_add_test(c, kmentity_bad_entity_returns_nonzero);
+  tcase_add_test(c, kmentity_nil_returns_nonzero);
   tcase_add_test(c, kmentity_works);
   tcase_add_test(c, entity_kind_works);
   tcase_add_test(c, entity_kind_bad_entity_returns_bad_entity);
+  tcase_add_test(c, entity_kind_nil_returns_bad_entity);
   tcase_add_test(c, entity_bad_entity_returs_null);
   tcase_add_test(c, entity_nonexistant_returns_null);
   tcase_add_test(c, sentity_works);
+  tcase_add_test(c, sentity_bad_entity_returns_null);
+  tcase_add_test(c, sentity_nil_returns_null);
   suite_add_tcase(s, c);
 
   return s;
