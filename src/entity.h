@@ -38,7 +38,7 @@ int kmentity(entity_t id);
 
 /* Get Entity */
 
-entity_kind_t entity_kind(entity_t id);
+int entity_kind(entity_t id);
 // get entity kind, or -1 if entity is not found
 
 void* entity(entity_t id);
