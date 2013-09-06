@@ -26,7 +26,6 @@ if(NOT CMAKE_BUILD_TYPE)
       "Build type")
 endif()
 
-set(UTIL_INCLUDE_DIR "util" CACHE INTERNAL "Utilities include dir")
 option(LINK_BLOCKS_RUNTIME
   "Link against BlockRuntime on targets with no builtin blocks support"
   YES)
@@ -47,8 +46,8 @@ add_subdirectory(${CHIPMUNK_DIR})
 ### ### ###
 # Global includes and links
 
-include_directories(${UTIL_INCLUDE_DIR} ${CHIPMUNK_INCLUDE_DIR}
-  ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${CHECK_INCLUDE_DIRS})
+include_directories(${CHIPMUNK_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR}
+  ${CHECK_INCLUDE_DIRS})
 
 set(dame_LINKAGES "chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES}"
   CACHE INTERNAL "Libraries for linking")
