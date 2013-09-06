@@ -39,7 +39,7 @@ module_t* mkmodule(cpVect pos)
 
   cpBody* body = cpBodyNew(mass, moi());
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
-  int id = genid();
+  int id = -1; // TODO
 
   *m = (module_t){
     .id = id,

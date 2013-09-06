@@ -16,9 +16,9 @@ port_t* mkport(const port_kind_t* kind, cpVect pos)
   }
 
   port_t* p = malloc(sizeof *p);
-  p->id = genid();
+  p->id = -1; // TODO
   if(kind->mk(p)) {
-    return NULL; // TODO error handling
+    return NULL;
   }
 
   cpBodySetPos(p->body, pos);
