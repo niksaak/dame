@@ -1,6 +1,7 @@
 #include <check.h>
 #include "../src/module.h"
 #include "../src/sys.h"
+#include "../src/draw.h"
 
 static void setup(void)
 {

@@ -1,6 +1,7 @@
 #include <check.h>
 #include "../src/sys.h"
 
+/* TODO: move gfx tests to draw
 START_TEST(start_gfx_zero_dimensions_returns_nonzero)
 {
   ck_assert_int_ne(start_gfx("test", 0, 0), 0);
@@ -29,6 +30,7 @@ START_TEST(setzoom_returns_previous_zoom)
   setzoom(z0);
 }
 END_TEST
+*/
 
 START_TEST(init_space_returns_current_space)
 {
@@ -69,16 +71,18 @@ END_TEST
 Suite* mk_sys_suite(void)
 {
   Suite* s = suite_create("sys");
-  TCase* tgfx = tcase_create("gfx");
+  // TCase* tgfx = tcase_create("gfx"); TODO
   TCase* tspace = tcase_create("space");
 
+  /*
   tcase_add_test(tgfx, start_gfx_zero_dimensions_returns_nonzero);
   tcase_add_test(tgfx, start_gfx_title_null_sets_default_title);
   tcase_add_test(tgfx, setzoom_returns_previous_zoom);
+  */
   tcase_add_test(tspace, init_space_returns_current_space);
   tcase_add_test(tspace, remove_body_works);
   tcase_add_test(tspace, remove_body_null_returns_nonzero);
-  suite_add_tcase(s, tgfx);
+  // suite_add_tcase(s, tgfx);
   suite_add_tcase(s, tspace);
 
   return s;
