@@ -60,5 +60,3 @@ inline int ran_domo(int min, int max)
   return ran_domo(min, max);
 }
 
-const char* gl_strerror(GLenum error);
-

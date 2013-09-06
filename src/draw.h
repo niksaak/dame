@@ -11,6 +11,11 @@
 
 #include "vector.h"
 
+/* GL */
+
+const char* gl_strerror(GLenum error);
+// get string representation of GL error
+
 /* Drawing primitives */
 // Return nonzero on error.
 
