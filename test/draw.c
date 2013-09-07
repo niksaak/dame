@@ -11,9 +11,16 @@ START_TEST(start_gfx_zero_dimensions_returns_nonzero)
 }
 END_TEST
 
-START_TEST(start_gfx_title_null_sets_default_title)
+START_TEST(start_gfx_title_null_returns_nonzero)
 {
-  ck_abort_msg("TODO"); // TODO
+  ck_assert_int_ne(start_gfx(NULL, 128, 128), 0);
+  stop_gfx();
+}
+END_TEST
+
+START_TEST(stop_gfx_not_started_returns_nonzero)
+{
+  ck_assert_int_ne(stop_gfx(), 0);
 }
 END_TEST
 
@@ -77,7 +84,8 @@ Suite* mk_draw_suite(void)
 
   // gfx:
   tcase_add_test(tgfx, start_gfx_zero_dimensions_returns_nonzero);
-  tcase_add_test(tgfx, start_gfx_title_null_sets_default_title);
+  tcase_add_test(tgfx, start_gfx_title_null_returns_nonzero);
+  tcase_add_test(tgfx, stop_gfx_not_started_returns_nonzero);
   tcase_add_test(tgfx, setzoom_returns_previous_zoom);
 
   // draw-NULL:
