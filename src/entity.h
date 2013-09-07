@@ -53,3 +53,18 @@ void* sentity(entity_t id, entity_kind_t kind);
 const char* entity_kind_name(entity_kind_t kind);
 // get name string for kind
 
+/* Physics */
+
+cpSpace* init_space(void);
+// initialize space so that you will be able to work with entities and
+// related things
+
+cpSpace* current_space(void);
+// get current space
+
+int deinit_space(void);
+// deinitialize current space
+
+int remove_body(cpBody* body);
+// remove body and all its shapes from space and then free them
+

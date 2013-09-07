@@ -38,7 +38,7 @@ static void entrem(Ent* ent)
 }
 
 static entity_t entgenid(void)
-{
+{ // TODO: rename to genid()
   static entity_t id;
   return ++id;
 }
@@ -117,5 +117,47 @@ void* sentity(entity_t id, entity_kind_t kind)
 const char* entity_kind_name(entity_kind_t kind)
 {
   return NULL; // TODO
+}
+
+/* Physics */
+
+static cpSpace* space; // the physics space
+
+cpSpace* init_space(void)
+{
+  space = cpSpaceNew();
+  return space;
+}
+
+cpSpace* current_space(void)
+{
+  return space;
+}
+
+int deinit_space(void)
+{
+  cpSpaceFree(space);
+  return 0;
+}
+
+int remove_body(cpBody* body)
+{
+  if(body == NULL) {
+    return -1; // nyurupo~
+  }
+
+  if(space == NULL) {
+    return -1;
+  }
+
+  cpBodyEachShape_b(body,
+      ^(cpShape* s){
+        cpSpaceRemoveShape(space, s);
+        cpShapeFree(s);
+      });
+  cpSpaceRemoveBody(space, body);
+  cpBodyFree(body);
+
+  return 0;
 }
 
