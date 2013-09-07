@@ -1,7 +1,7 @@
 #include "particle.h"
 
 #include <math.h>
-#include "sys.h"
+#include "entity.h"
 #include "vector.h"
 #include "draw.h"
 

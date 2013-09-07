@@ -1,7 +1,7 @@
 #include "rcs.h"
 
 #include <chipmunk/chipmunk.h>
-#include "../sys.h"
+#include "../entity.h"
 #include "../util.h"
 #include "../draw.h"
 #include "ports_util.h"

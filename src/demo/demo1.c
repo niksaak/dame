@@ -4,6 +4,7 @@
 #include <chipmunk/chipmunk.h>
 
 #include "../sys.h"
+#include "../entity.h"
 #include "../draw.h"
 #include "../vector.h"
 

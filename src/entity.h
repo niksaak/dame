@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chipmunk/chipmunk.h>
+
 /* ENTITY
  * manage game entities.
  */

@@ -1,7 +1,7 @@
 #include "module.h"
 
 #include <stdlib.h>
-#include "sys.h"
+#include "entity.h"
 #include "util.h"
 #include "draw.h"
 #include "port.h"

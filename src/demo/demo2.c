@@ -7,6 +7,7 @@
 #include "../draw.h"
 #include "../vector.h"
 #include "../util.h"
+#include "../entity.h"
 #include "../sys.h"
 #include "../module.h"
 #include "../port.h"
