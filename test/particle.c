@@ -1,6 +1,6 @@
 #include <check.h>
 #include "../src/particle.h"
-#include "../src/sys.h"
+#include "../src/entity.h"
 
 static void setup(void)
 {

@@ -1,9 +1,9 @@
 #include "particle.h"
 
 #include <math.h>
-#include "sys.h"
 #include "vector.h"
 #include "draw.h"
+#include "entity.h"
 
 // moment of inertia for circle: (pi/4)*r^4
 static const cpFloat particle_r = 0.01;

@@ -39,8 +39,6 @@ QUADCIRCLE = 1.57079632679489661923132169163975144209858469968755,
 SEMICIRCLE = PI,
 TRIQUADCIRCLE = 4.7123889803846898576939650749192543262957540990;
 
-int genid(void);
-
 static inline double floran(void)
 { // floating rand
   return (double)rand()/(double)RAND_MAX;
@@ -61,6 +59,4 @@ inline int ran_domo(int min, int max)
   }
   return ran_domo(min, max);
 }
-
-const char* gl_strerror(GLenum error);
 

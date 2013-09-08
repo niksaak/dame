@@ -7,7 +7,8 @@
 #include "../draw.h"
 #include "../vector.h"
 #include "../util.h"
-#include "../sys.h"
+#include "../entity.h"
+#include "../event.h"
 #include "../module.h"
 #include "../port.h"
 
@@ -31,7 +32,7 @@ void demo2(void)
   module_mkport(module, 3, RCS_PORT_KIND);
 
   setzoom(8);
-  while(!keypress(GLFW_KEY_Q) && running) {
+  while(!keypress(GLFW_KEY_Q)) {
     cpBody* body = module->body;
     cpVect vel = cpBodyGetVel(body);
     cpVect pos = cpBodyGetPos(body);

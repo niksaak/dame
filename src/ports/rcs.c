@@ -1,9 +1,9 @@
 #include "rcs.h"
 
 #include <chipmunk/chipmunk.h>
-#include "../sys.h"
 #include "../util.h"
 #include "../draw.h"
+#include "../entity.h"
 #include "ports_util.h"
 
 static const cpVect shapev[] = {

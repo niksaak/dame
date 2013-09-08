@@ -3,7 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <chipmunk/chipmunk.h>
 
-#include "../sys.h"
+#include "../event.h"
+#include "../entity.h"
 #include "../draw.h"
 #include "../vector.h"
 
@@ -23,7 +24,7 @@ void demo1(void)
   cpBodySetPos(ball, cpvzero);
   cpShapeSetFriction(shape, 0.7);
 
-  while(!keypress(GLFW_KEY_SPACE) && !keypress(GLFW_KEY_Q) && running) {
+  while(!keypress(GLFW_KEY_SPACE) && !keypress(GLFW_KEY_Q)) {
     Vec pos = cpv2vec(cpBodyGetPos(ball));
 
     glClear(GL_COLOR_BUFFER_BIT);

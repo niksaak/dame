@@ -4,14 +4,12 @@
 Suite* mk_draw_suite(void);
 Suite* mk_module_suite(void);
 Suite* mk_particle_suite(void);
-Suite* mk_sys_suite(void);
 Suite* mk_entity_suite(void);
 
 int main(void)
 {
   int nf;
-  SRunner* r = srunner_create(mk_sys_suite());
-  srunner_add_suite(r, mk_draw_suite());
+  SRunner* r = srunner_create(mk_draw_suite());
   srunner_add_suite(r, mk_particle_suite());
   srunner_add_suite(r, mk_module_suite());
   srunner_add_suite(r, mk_entity_suite());

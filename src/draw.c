@@ -2,6 +2,134 @@
 
 #include <math.h>
 
+static double zoom_factor = 1.0;
+GLFWwindow* window; // the main window
+
+/* GL */
+
+// Helpers
+
+static void fix_aspect(GLFWwindow* win, int width, int height)
+{
+  double z = zoom_factor;
+  double a = ((GLfloat)width / (GLfloat)height) * z; // aspect
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glViewport(0, 0, width, height);
+
+  if(width >= height) {
+    glOrtho(-a, a, -z, z, -z, z);
+  } else {
+    glOrtho(-z, z, 1 / -a, 1 / a, -z, z);
+  }
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
+
+static void on_close(GLFWwindow* win)
+{ // TODO
+}
+
+static int setup_gl(void)
+{
+  glShadeModel(GL_SMOOTH);
+  glClearColor(0, 0, 0, 0);
+  glClearDepth(1);
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+
+  glEnable(GL_ALPHA_TEST);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glEnable(GL_LINE_SMOOTH);
+  glAlphaFunc(GL_LEQUAL, 1);
+  glDepthFunc(GL_LEQUAL);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glLineWidth(1.2);
+  return 0;
+}
+
+// Sys:
+
+int start_gfx(const char* title, int width, int height)
+{
+  if(!glfwInit()) {
+    return -1;
+  }
+  // setting up window:
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  window = glfwCreateWindow(width, height, title, NULL, NULL);
+  if(window == NULL) {
+    glfwTerminate();
+    return -1;
+  }
+  glfwMakeContextCurrent(window);
+  // setting callbacks:
+  glfwSetWindowCloseCallback(window, on_close);
+  glfwSetWindowSizeCallback(window, fix_aspect);
+
+  setup_gl();
+  //on_resize(window, width, height);
+  return 0;
+}
+
+int stop_gfx(void) {
+  glfwDestroyWindow(window);
+  glfwTerminate();
+  return 0;
+}
+
+const char* gl_strerror(GLenum error) {
+  switch(error) {
+    case GL_NO_ERROR:
+      return "No error";
+    case GL_INVALID_ENUM:
+      return "Invalid enum";
+    case GL_INVALID_OPERATION:
+      return "Invalid operation";
+    case GL_STACK_OVERFLOW:
+      return "Stack overflow";
+    case GL_STACK_UNDERFLOW:
+      return "Stack underflow";
+    case GL_OUT_OF_MEMORY:
+      return "Out of memory";
+    case GL_TABLE_TOO_LARGE:
+      return "Table too large";
+    default:
+      break;
+  }
+  return "Unknown error";
+}
+
+GLFWwindow* current_window(void)
+{
+  return window;
+}
+
+// Rendering:
+
+int render(void)
+{
+  glfwSwapBuffers(window);
+  glfwPollEvents();
+  return 0;
+}
+
+double zoom()
+{
+  return zoom_factor;
+}
+
+double setzoom(double f)
+{
+  double ret = zoom_factor;
+  zoom_factor = f;
+  return ret;
+}
+
 /* Drawing primitives */
 
 int draw_points(const Vec coords[], size_t count)

@@ -1,10 +1,10 @@
 #include "module.h"
 
 #include <stdlib.h>
-#include "sys.h"
 #include "util.h"
 #include "draw.h"
 #include "port.h"
+#include "entity.h"
 
 static const cpVect shapev[] = {
   { -1, 1 },
@@ -39,7 +39,7 @@ module_t* mkmodule(cpVect pos)
 
   cpBody* body = cpBodyNew(mass, moi());
   cpShape* shape = cpPolyShapeNew(body, shapec, shapev, cpvzero);
-  int id = genid();
+  int id = -1; // TODO
 
   *m = (module_t){
     .id = id,
