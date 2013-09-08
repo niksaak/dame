@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 
 #include "vector.h"
-#include "sys.h"
 #include "draw.h"
 #include "demo/demos.h"
 

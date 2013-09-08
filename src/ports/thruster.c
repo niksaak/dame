@@ -1,9 +1,9 @@
 #include "thruster.h"
 
 #include <chipmunk/chipmunk.h>
-#include "../entity.h"
 #include "../util.h"
 #include "../draw.h"
+#include "../entity.h"
 
 static cpVect shapev[] = {
   { 0, 0.5 },

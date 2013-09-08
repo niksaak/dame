@@ -1,6 +1,5 @@
 #include <check.h>
 #include "../src/draw.h"
-#include "../src/sys.h"
 
 /* gfx */
 

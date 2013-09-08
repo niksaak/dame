@@ -1,7 +1,9 @@
-#include "sys.h"
+#include "event.h"
 
 #include <time.h>
 #include <GLFW/glfw3.h>
+
+#include "draw.h"
 
 int keypress(int key)
 {

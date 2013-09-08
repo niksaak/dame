@@ -1,7 +1,6 @@
 #include <check.h>
 #include "../src/entity.h"
 #include "../src/module.h"
-#include "../src/sys.h"
 
 /* entities */
 

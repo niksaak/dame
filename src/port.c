@@ -2,7 +2,6 @@
 
 #include <GLFW/glfw3.h>
 #include "entity.h"
-#include "sys.h"
 #include "util.h"
 #include "ports/rcs.h"
 #include "ports/thruster.h"

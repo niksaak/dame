@@ -1,10 +1,10 @@
 #include "module.h"
 
 #include <stdlib.h>
-#include "entity.h"
 #include "util.h"
 #include "draw.h"
 #include "port.h"
+#include "entity.h"
 
 static const cpVect shapev[] = {
   { -1, 1 },
