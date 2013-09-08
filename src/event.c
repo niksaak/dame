@@ -2,14 +2,6 @@
 
 #include <time.h>
 #include <GLFW/glfw3.h>
-#include <chipmunk/chipmunk.h>
-
-#include "draw.h"
-
-/* Internals */
-
-
-/* Events */
 
 int keypress(int key)
 {

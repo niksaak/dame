@@ -1,14 +1,8 @@
 #pragma once
 
-/* SYS
- * system utilities
+/* EVENT
+ * process and generate events
  */
-
-#include <chipmunk/chipmunk.h>
-
-int running; // FIXME: get rid of this
-
-/* Events */
 
 int keypress(int key);
 // returns nonzero if key is pressed
