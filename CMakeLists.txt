@@ -66,11 +66,6 @@ add_executable(dame ${dame_MAIN_SOURCE} $<TARGET_OBJECTS:dame_base>)
 target_link_libraries(dame
   chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES})
 
-if(LINK_BLOCKS_RUNTIME)
-  find_library(BLOCKS_RUNTIME "BlocksRuntime")
-  target_link_libraries(dame ${BLOCKS_RUNTIME})
-endif()
-
 # Tests
 
 file(GLOB_RECURSE dame_TEST_SOURCES "test/*.c")
@@ -78,8 +73,15 @@ add_executable(checkall ${dame_TEST_SOURCES} $<TARGET_OBJECTS:dame_base>)
 target_link_libraries(checkall
   chipmunk_static m ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${CHECK_LIBRARIES})
 
+# Blocks Rutime
+
 if(LINK_BLOCKS_RUNTIME)
   find_library(BLOCKS_RUNTIME "BlocksRuntime")
+  if(BLOCKS_RUNTIME-NOTFOUND)
+    message(SEND_ERROR, "Blocks Runtime library not found")
+  endif()
+
+  target_link_libraries(dame ${BLOCKS_RUNTIME})
   target_link_libraries(checkall ${BLOCKS_RUNTIME})
 endif()
 
