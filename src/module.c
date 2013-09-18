@@ -5,6 +5,7 @@
 #include "draw.h"
 #include "port.h"
 #include "entity.h"
+#include "error.h"
 
 static const cpVect shapev[] = {
   { -1, 1 },
@@ -29,7 +30,8 @@ module_t* mkmodule(cpVect pos)
 {
   module_t* m = malloc(sizeof *m);
   if(m == NULL) {
-    return NULL; // malloc
+    panic("Bad malloc.");
+    return NULL;
   }
 
   cpSpace* space = current_space();
@@ -61,6 +63,7 @@ module_t* mkmodule(cpVect pos)
 int kmmodule(module_t* module)
 {
   if(module == NULL) {
+    error("Module is NULL");
     return -1;
   }
   if(module->body != NULL) {
@@ -74,6 +77,7 @@ int kmmodule(module_t* module)
 int draw_module(const module_t* module)
 {
   if(module == NULL) {
+    error("Module is NULL");
     return -1; // nurupo~
   }
 
@@ -134,6 +138,7 @@ int module_mkport(module_t* module, int place, const port_kind_t* kind)
   cpSpace* space = current_space();
   port_t* p = mkport(kind, cpvadd(cpBodyGetPos(module->body), (cpVect){1,0}));
   if(p == NULL) {
+    error("Unable to create port");
     return -1; // mkport() unsuccessful
   }
   void (^rotate_port_b)(void) = ^{
@@ -173,9 +178,11 @@ int module_kmport(module_t* module, int place)
 {
   port_t* p = module->ports[place];
   if(p == NULL) {
+    warning("Port is already NULL");
     return -1; // TODO: warn here
   }
 
+  kmport(module->ports[place]);
   module->ports[place] = NULL;
   kmport(p);
 
