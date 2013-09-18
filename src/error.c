@@ -8,13 +8,14 @@ static const char* statusstr[] = {
   "ERROR",
   "WARNING",
   "MESSAGE",
+  "DEBUG",
   "UNKNOWN"
 };
 
 static const size_t statusstrc = ARRLEN(statusstr, const char*);
 
-void _error(enum error_status status, const char* file, int line,
-            const char* func, const char* fmt, ...)
+void _eprintf(enum error_status status, const char* file, int line,
+              const char* func, const char* fmt, ...)
 {
   va_list ap;
 
@@ -23,7 +24,7 @@ void _error(enum error_status status, const char* file, int line,
   }
 
 #ifndef NDEBUG
-  fprintf(stderr, "%s:%i:%s:\n", file, line, func); // print file and line info
+  fprintf(stderr, "%s:%i:%s():\n", file, line, func); // print file and line info
 #else
   fprintf(stderr, "@%s() ", func);
 #endif
