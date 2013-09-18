@@ -1,6 +1,8 @@
 #include "draw.h"
 
 #include <math.h>
+#include "error.h"
+#include "util.h"
 
 static double zoom_factor = 1.0;
 GLFWwindow* window; // the main window
@@ -10,7 +12,7 @@ GLFWwindow* window; // the main window
 // Helpers
 
 static void fix_aspect(GLFWwindow* win, int width, int height)
-{
+{ // TODO: consider replasing win parameter with window global
   double z = zoom_factor;
   double a = ((GLfloat)width / (GLfloat)height) * z; // aspect
 
@@ -55,6 +57,7 @@ static int setup_gl(void)
 int start_gfx(const char* title, int width, int height)
 {
   if(!glfwInit()) {
+    error("Unable to initialize GLFW");
     return -1;
   }
   // setting up window:
@@ -63,6 +66,7 @@ int start_gfx(const char* title, int width, int height)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   window = glfwCreateWindow(width, height, title, NULL, NULL);
   if(window == NULL) {
+    error("Window creation failed");
     glfwTerminate();
     return -1;
   }
@@ -77,6 +81,10 @@ int start_gfx(const char* title, int width, int height)
 }
 
 int stop_gfx(void) {
+  if(window == NULL) {
+    error("Window is not initialized");
+    return -1;
+  }
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;
@@ -113,6 +121,10 @@ GLFWwindow* current_window(void)
 
 int render(void)
 {
+  if(window == NULL) {
+    error("Unable to render: window is not initialized.");
+    return -1;
+  }
   glfwSwapBuffers(window);
   glfwPollEvents();
   return 0;
@@ -135,6 +147,7 @@ double setzoom(double f)
 int draw_points(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
+    error("Bad coords");
     return -1; // nurupo~
   }
   //glEnableClientState(GL_VERTEX_ARRAY);
@@ -147,6 +160,7 @@ int draw_points(const Vec coords[], size_t count)
 int draw_polyline(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
+    error("Bad coords");
     return -1; // nurupo~
   }
   //glEnableClientState(GL_VERTEX_ARRAY);
@@ -159,6 +173,7 @@ int draw_polyline(const Vec coords[], size_t count)
 int draw_polygon(const Vec coords[], size_t count)
 {
   if(coords == NULL) {
+    error("Bad coords");
     return -1; // nurupo~
   }
   //glEnableClientState(GL_VERTEX_ARRAY);
@@ -170,6 +185,11 @@ int draw_polygon(const Vec coords[], size_t count)
 
 static Vec decasteljau(const Vec vects[], size_t count, double t)
 {
+  if(vects == NULL) {
+    error("Bad vects pointer");
+    return (Vec){0,0};
+  }
+
   Vec v[count];
 
   for(int i = 0; i < count; i++) {
@@ -191,6 +211,7 @@ int draw_curve(const Vec coords[], size_t count)
   Vec* curve;
 
   if(coords == NULL) {
+    error("Bad coords");
     return -1; // nurupo~
   }
   for(int i = 0, j = 1; j < count; i++, j++) {
@@ -212,7 +233,7 @@ int draw_circle(Vec pos, double radius)
 { // drawing algorithm from here: http://slabode.exofire.net/circle_draw.shtml
   static Vec verts[360];
   static const size_t vertc = sizeof verts / sizeof (Vec);
-  double theta = 2 * M_PI / vertc;
+  double theta = 2 * PI / vertc;
   double costh = cos(theta);
   double sinth = sin(theta);
   double t;
