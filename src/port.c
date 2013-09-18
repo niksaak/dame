@@ -1,6 +1,7 @@
 #include "port.h"
 
 #include <GLFW/glfw3.h>
+#include "error.h"
 #include "entity.h"
 #include "util.h"
 #include "ports/rcs.h"
@@ -9,15 +10,18 @@
 port_t* mkport(const port_kind_t* kind, cpVect pos)
 {
   if(kind == NULL) {
+    error("Kind is NULL");
     return NULL; // nyurupo~
   }
   if(kind->mk == NULL) {
+    error("Kinds' mk() is not implemented");
     return NULL; // not implemented
   }
 
   port_t* p = malloc(sizeof *p);
   p->id = -1; // TODO
   if(kind->mk(p)) {
+    error("Making port unsuccessful");
     return NULL;
   }
 
@@ -29,12 +33,15 @@ port_t* mkport(const port_kind_t* kind, cpVect pos)
 int kmport(port_t* port)
 {
   if(port == NULL) {
+    error("Port is already NULL");
     return -1; // nyurupo~
   }
   if(port->kind == NULL) {
+    error("Ports' kind is NULL");
     return -1; // bad port
   }
   if(port->kind->km == NULL) {
+    error("Ports' km() is not implemented");
     return -1; // not implemented
   }
 
@@ -51,12 +58,15 @@ int kmport(port_t* port)
 int draw_port(port_t* port)
 {
   if(port == NULL) {
+    error("Port is NULL.");
     return -1; // nyurupo~
   }
   if(port->body == NULL) {
+    error("Body is NULL.");
     return -1; // no body
   }
   if(port->kind->draw == NULL) {
+    error("draw() is not implemented for this kind");
     return -1; // not implemented
   }
 
