@@ -1,6 +1,7 @@
 #include "particle.h"
 
 #include <math.h>
+#include "error.h"
 #include "vector.h"
 #include "draw.h"
 #include "entity.h"
@@ -16,6 +17,7 @@ int mkparticle(particle_kind_t kind, cpVect pos, cpVect impulse, double energy)
 {
   particle_t* p = malloc(sizeof *p);
   if(p == NULL) {
+    panic("Bad malloc.");
     return -1; // bad malloc
   }
   cpSpace* space = current_space();
@@ -42,6 +44,7 @@ int kmparticle_id(int id)
 {
   particle_t* p = particle(id);
   if(p == NULL) {
+    warning("Particle is already NULL.");
     return -1;
   }
 
@@ -55,6 +58,7 @@ int kmparticle_id(int id)
 int kmparticle_ptr(particle_t* p)
 {
   if(p == NULL) {
+    warning("Particle is already NULL.");
     return -1;
   }
 
@@ -94,6 +98,7 @@ int draw_particles(void)
       }
     }
     if(draw_points(pointv, i % pointc)) {
+      error("Failed drawing points.");
       return -1;
     }
   }

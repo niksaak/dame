@@ -1,6 +1,7 @@
 #include "entity.h"
 
 #include <uthash.h>
+#include "error.h"
 
 typedef struct Ent {
   entity_t id;
@@ -17,6 +18,10 @@ static Ent* entv; // entities hash table
 static void entput(Ent ent)
 {
   Ent* e = malloc(sizeof ent); // TODO: check malloc
+
+  if(e == NULL) {
+    panic("Bad malloc.");
+  }
 
   *e = ent;
   HASH_ADD_INT(entv, id, e);
@@ -64,6 +69,7 @@ int kmentity(entity_t id)
   Ent* ent = getent(id);
 
   if(ent == NULL) {
+    error("Entity not found: %i", id);
     return -1;
   }
   entrem(ent);
@@ -120,6 +126,8 @@ const char* entity_kind_name(entity_kind_t kind)
 }
 
 /* Physics */
+// TODO: looks out of place in this header, should consider moving it
+//       somewhere else.
 
 static cpSpace* space; // the physics space
 
@@ -131,6 +139,9 @@ cpSpace* init_space(void)
 
 cpSpace* current_space(void)
 {
+  if(space == NULL) {
+    error("Space is not initialized");
+  }
   return space;
 }
 
@@ -143,10 +154,12 @@ int deinit_space(void)
 int remove_body(cpBody* body)
 {
   if(body == NULL) {
+    error("Bad body");
     return -1; // nyurupo~
   }
 
   if(space == NULL) {
+    error("Space is not initialized");
     return -1;
   }
 
